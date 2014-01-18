@@ -1,0 +1,48 @@
+.add {
+    background-image:url(../images/add.png) !important;
+}
+
+.delete {
+    background-image:url(../images/delete.png) !important;
+}
+
+.edit {
+    background-image:url(../images/edit.png) !important;
+}
+
+
+.refresh {
+    background-image:url(../images/refresh.png) !important;
+}
+
+.save {
+    background-image:url(../images/save.png) !important;
+}
+
+.users {
+    background-image: url(../images/users.png) !important;
+}
+
+.user {
+    background-image: url(../images/user.png) !important;
+}
+
+.list {
+    background-image: url(../images/list.png) !important;
+}
+
+.eye {
+    background-image: url(../images/eye.png) !important;
+}
+
+.packages {
+    background-image: url(../images/packages.png) !important;
+}
+
+.search {
+    background-image: url(../images/search.png) !important;
+}
+
+.upload {
+    background-image: url(../images/upload.png) !important;
+}
