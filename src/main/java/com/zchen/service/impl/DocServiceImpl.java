@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Zhouce Chen
@@ -20,7 +19,7 @@ import java.util.List;
  */
 @Service
 public class DocServiceImpl implements DocService {
-
+    String rootAbsolutePath = "D:/shared_doc";
     @Resource
     private DocDao docDao;
 
@@ -33,7 +32,7 @@ public class DocServiceImpl implements DocService {
     public void upload(Doc doc) {
         MultipartFile uploadedFile = doc.getFile();
         String fileName = uploadedFile.getOriginalFilename();
-        File savedFile = new File("D:/shared_doc/"+fileName);
+        File savedFile = new File(rootAbsolutePath + doc.getPath() + "/" + fileName);
         try {
             uploadedFile.transferTo(savedFile);
         } catch (IOException e) {

@@ -5,7 +5,7 @@ Ext.define('Share.controller.Docs', {
 
     models: [  'Doc' ],
 
-    views: ['DocList' ],
+    views: ['DocList'],
 
     refs: [
         {
@@ -13,8 +13,8 @@ Ext.define('Share.controller.Docs', {
             selector: 'doclist'
         },
         {
-            ref: 'usersTree',
-            selector: 'usertree'
+            ref: 'dirTree',
+            selector: 'dirtree'
         }
     ],
 
@@ -42,11 +42,20 @@ Ext.define('Share.controller.Docs', {
     },
 
     upload : function(){
+        var selectedNodes = this.getDirTree().getSelectionModel().getSelection();
+        if (selectedNodes.length == 0) {
+            Ext.CommonsMsg.alert("Warnning", "Please select a directory in left navigation tree.");
+            return;
+        }
+        var path = this.getDirTree().getSelectionModel().getSelection()[0].raw.id;
         var store = this.getDocsStore();
         var form = this.getDocList().down("form").getForm();
         if(form.isValid()){
             form.submit({
                 url: '/doc/upload',
+                params: {
+                    path: path
+                },
                 waitMsg: 'Uploading your shared document ...',
                 success: function(form, action) {
                     store.reload();
@@ -55,6 +64,8 @@ Ext.define('Share.controller.Docs', {
 
                 }
             });
+        } else {
+            Ext.CommonsMsg.alert("Warnning", "Please select a document to upload.");
         }
 
     }
