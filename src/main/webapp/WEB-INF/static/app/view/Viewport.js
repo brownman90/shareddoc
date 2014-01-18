@@ -7,14 +7,7 @@ Ext.define('Share.view.Viewport', {
             xtype: 'doclist'
         },
         {
-            title: 'Navigation',
-            region: 'west',
-            split: true,
-            collapsible: true,
-            width: 300,
-            layout: 'fit',
-            border: false
-
+            xtype: 'dirtree'
         }
     ]
 });

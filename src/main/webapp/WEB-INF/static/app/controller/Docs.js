@@ -38,7 +38,7 @@ Ext.define('Share.controller.Docs', {
         var nameField = this.getDocList().down("textfield[name=name]");
         var store = this.getDocsStore();
         store.proxy.setExtraParam("name", nameField.getValue());
-        this.getDocsStore().load();
+        store.load();
     },
 
     upload : function(){

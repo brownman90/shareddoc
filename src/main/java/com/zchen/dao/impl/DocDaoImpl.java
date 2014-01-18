@@ -57,6 +57,10 @@ public class DocDaoImpl implements DocDao {
             doc.setName("%"+doc.getName()+"%");
             sb.append("and name like :name");
         }
+        if(StringUtils.isNotEmpty(doc.getPath())){
+            doc.setPath(doc.getPath() + "%");
+            sb.append(" and path like :path");
+        }
         sb.append(String.format(" limit %d,%d ", start, limit));
         return jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(doc), new DocMapper());
     }
