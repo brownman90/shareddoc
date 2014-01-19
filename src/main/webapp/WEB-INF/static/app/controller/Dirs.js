@@ -44,6 +44,9 @@ Ext.define('Share.controller.Dirs', {
     nodeClick: function (tree, record) {
         var path = record.raw.id;
         var docStore = this.getDocsStore();
+        if (path == docStore.proxy.extraParams.path) {
+            return;
+        }
         docStore.proxy.setExtraParam("name", "");
         docStore.proxy.setExtraParam("path", path);
         docStore.load();
