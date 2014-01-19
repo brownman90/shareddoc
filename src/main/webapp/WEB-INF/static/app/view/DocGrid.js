@@ -18,9 +18,9 @@ Ext.define('Share.view.DocGrid', {
             ]},
         { action: 'upload', text: 'Upload', iconCls: 'upload', tooltip: 'Upload your Document'},
         '-',
-        { action: 'selections', text: 'Selections', iconCls: 'checkbox', tooltip: "Enable Multi-Select", enableToggle: true},
-        '-',
+        { action: 'selections', iconCls: 'checkbox', tooltip: "Enable Multi-Select", enableToggle: true},
         { action: 'delete', text: 'Delete', iconCls: 'trash', tooltip: "Delete Documents"},
+        { action: 'download', text: 'Download', iconCls: 'download', tooltip: "Download Documents"},
         '->',
         { xtype: 'textfield', name: 'name', emptyText: 'Document Name'},
 
@@ -57,8 +57,11 @@ Ext.define('Share.view.DocGrid', {
                                     id: record.raw.id
                                 });
                                 store.getProxy().destroy(operation, function (data) {
-                                    if (data.success) {
+                                    var result = Ext.JSON.decode(data.response.responseText);
+                                    if (result.status) {
                                         store.remove(record);
+                                    } else {
+                                        Ext.CommonsMsg.error('Error', result.message);
                                     }
                                 });
                             }

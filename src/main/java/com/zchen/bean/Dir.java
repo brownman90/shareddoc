@@ -11,6 +11,9 @@ public class Dir {
     private String text;
     private List<Dir> children;
 
+    public Dir() {
+    }
+
     public Dir(String id, String text) {
         this.id = id;
         this.text = text;

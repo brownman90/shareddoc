@@ -28,14 +28,16 @@ public class DocController {
     }
 
     @RequestMapping("/list")
-    public @ResponseBody
-    ResponseGrid list(Doc doc, int start, int limit){
+    public
+    @ResponseBody
+    ResponseGrid list(Doc doc, int start, int limit) {
         return docService.query(doc, start, limit);
     }
 
     @RequestMapping("/upload")
-    public @ResponseBody
-    ResponseMap upload(Doc doc){
+    public
+    @ResponseBody
+    ResponseMap upload(Doc doc) {
         try {
             docService.upload(doc);
         } catch (FileExistsException e) {
@@ -59,7 +61,6 @@ public class DocController {
     public
     @ResponseBody
     ResponseMap deletes(int[] idList) {
-
         for (int id : idList) {
             docService.delete(new Doc(id));
         }

@@ -15,7 +15,7 @@ Ext.define('Share.view.DirTree', {
 
     tools: [
         {
-            id: 'refresh-tree-btn',
+            action: 'refresh',
             type: 'refresh'
         }
     ],

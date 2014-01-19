@@ -3,6 +3,7 @@ package com.zchen.service.impl;
 import com.zchen.bean.Dir;
 import com.zchen.service.DirService;
 import com.zchen.utils.Utils;
+import org.apache.commons.io.FileExistsException;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -41,6 +42,18 @@ public class DirServiceImpl implements DirService {
         return dir;
     }
 
+    @Override
+    public void create(Dir dir) {
 
+    }
 
+    @Override
+    public void delete(Dir dir) throws FileExistsException {
+        String path = rootAbsolutePath + dir.getId();
+        File file = new File(path);
+        boolean result = file.delete();
+        if (!result) {
+            throw new FileExistsException("The directory is not empty.");
+        }
+    }
 }

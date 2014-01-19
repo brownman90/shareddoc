@@ -3,7 +3,10 @@ Ext.define('Share.store.Dirs', {
     proxy: {
         type: 'ajax',
         api: {
-            read: '/dir/tree'
+            read: '/dir/tree',
+            create: '/dir/create',
+            destroy: '/dir/delete',
+            update: '/dir/update'
         }
     },
     root: {

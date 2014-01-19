@@ -9,22 +9,29 @@ import java.util.HashMap;
 public class ResponseMap extends HashMap {
 
     public static ResponseMap get() {
-        return new ResponseMap();
+        ResponseMap map = new ResponseMap();
+        map.put("success", true);
+        return map;
     }
 
     public ResponseMap success() {
-        this.put("success", true);
+        this.put("status", true);
         return this;
     }
 
     public ResponseMap success(String message) {
-        this.put("success", true);
+        this.put("status", true);
         this.put("message", message);
         return this;
     }
 
+    public ResponseMap failure() {
+        this.put("status", false);
+        return this;
+    }
+
     public ResponseMap failure(String message) {
-        this.put("success", false);
+        this.put("status", false);
         this.put("message", message);
         return this;
     }

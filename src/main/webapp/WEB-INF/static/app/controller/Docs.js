@@ -58,11 +58,12 @@ Ext.define('Share.controller.Docs', {
                     path: path
                 },
                 waitMsg: 'Uploading your shared document ...',
-                success: function (form, action) {
-                    store.reload();
-                },
-                failure: function (form, data) {
-                    Ext.CommonsMsg.error("Error", data.result.message);
+                success: function (form, data) {
+                    var result = data.result;
+                    if (result.status)
+                        store.reload();
+                    else
+                        Ext.CommonsMsg.error("Error", result.message);
                 }
             });
         } else {
@@ -83,25 +84,29 @@ Ext.define('Share.controller.Docs', {
 
     deleteDocs: function (btn) {
         var records = this.getDocGrid().getSelectionModel().getSelection();
-        var idList = new Array();
-        Ext.Array.each(records, function (name, index) {
-            idList.push(records[index].raw.id);
+        var confirm = "Are you sure you want to delete " + (records.length == 1 ? "this document." : "these " + records.length + " documents.");
+        Ext.Msg.confirm("Confirm", confirm, function (v) {
+            if (v === "yes") {
+
+                var idList = new Array();
+                Ext.Array.each(records, function (name, index) {
+                    idList.push(records[index].raw.id);
+                });
+                Ext.Ajax.request({
+                    url: '/doc/deletes',
+                    params: {
+                        idList: idList
+                    },
+                    success: function (response) {
+                        var result = Ext.JSON.decode(response.responseText);
+                        if (result.status)
+                            this.getDocsStore().removeAll(records);
+                        else
+                            Ext.CommonsMsg.error('Error', result.message);
+                    },
+                    scope: this
+                })
+            }
         });
-        Ext.Ajax.request({
-            url: '/doc/deletes',
-            params: {
-                idList: idList
-            },
-            success: function (response) {
-                var data = Ext.JSON.decode(response.responseText);
-                this.getDocsStore().removeAll(records);
-            },
-            scope: this
-
-        })
     }
-
-
-
-
 });
