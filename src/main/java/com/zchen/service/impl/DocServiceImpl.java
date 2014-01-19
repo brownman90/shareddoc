@@ -35,9 +35,9 @@ public class DocServiceImpl implements DocService {
     public void upload(Doc doc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException {
         MultipartFile uploadedFile = doc.getFile();
         String fileName = uploadedFile.getOriginalFilename();
-        File savedFile = new File(rootAbsolutePath + doc.getPath() + "/" + fileName);
+        File savedFile = new File(rootAbsolutePath + doc.getPath() + fileName);
         if (savedFile.exists()) {
-            throw new FileExistsException(fileName + " exists in " + rootAbsolutePath + doc.getPath() + "/ .");
+            throw new FileExistsException(fileName + " exists in " + rootAbsolutePath + doc.getPath() + " .");
         }
         if (uploadedFile.getSize() > 20000000) {
             throw new FileUploadBase.FileSizeLimitExceededException(String.format("File size(%d) exceeds max upload limit(%d).", uploadedFile.getSize(), 20000000), uploadedFile.getSize(), 20000000);

@@ -78,7 +78,7 @@ Ext.define('Share.controller.Dirs', {
                 var operation = new Ext.data.Operation({
                     action: 'create',
                     params: {
-                        id: node.raw.id + "/" + name,
+                        id: node.raw.id + name,
                         text: name
                     }
                 });
@@ -86,7 +86,7 @@ Ext.define('Share.controller.Dirs', {
                 store.getProxy().create(operation, function (data) {
                     var result = Ext.JSON.decode(data.response.responseText);
                     if (result.status) {
-                        node.appendChild({id: node.raw.id + "/" + name, text: name, loaded: true});
+                        node.appendChild({id: node.raw.id + name + "/", text: name, loaded: true});
                     } else {
                         Ext.CommonsMsg.error('Error', result.message);
                     }

@@ -27,10 +27,13 @@ Ext.define('Share.view.DocGrid', {
         { action: 'search', text: 'Search', iconCls: 'search', tooltip: 'Search Docs' }
     ],
     columns: [
-        {header: 'Name', dataIndex: 'name', flex: 4, renderer: function (value, md, record) {
+        {header: 'Name', dataIndex: 'name', flex: 3, renderer: function (value, md, record) {
             if (record.raw.type.isNotEmpty()) {
                 return value + "<span style='color:gray'>." + record.raw.type + "</span>";
             }
+            return value;
+        }},
+        {header: 'Size', dataIndex: 'size', flex: 1, renderer: function (value) {
             return value;
         }},
         {header: 'Path', dataIndex: 'path', flex: 2},

@@ -31,10 +31,10 @@ public class DirServiceImpl implements DirService {
     private Dir fillChildren(Dir dir){
         File[] childrenFiles =  new File(rootAbsolutePath + dir.getId()).listFiles();
         List<Dir> children = new ArrayList<>();
-        for (File childFIle : childrenFiles) {
-            if(childFIle.isDirectory()){
-                String id = childFIle.getPath().substring(rootAbsolutePath.length());
-                Dir childDir = new Dir(Utils.slashExchange(id), childFIle.getName());
+        for (File childFile : childrenFiles) {
+            if (childFile.isDirectory()) {
+                String id = childFile.getPath().substring(rootAbsolutePath.length()) + "/";
+                Dir childDir = new Dir(Utils.slashExchange(id), childFile.getName());
                 children.add(fillChildren(childDir));
             }
         }
