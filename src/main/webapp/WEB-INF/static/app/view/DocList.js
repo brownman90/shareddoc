@@ -16,7 +16,11 @@ Ext.define('Share.view.DocList', {
             items: [
                 {xtype: 'filefield', name: 'file', emptyText: 'Select Document', labelWidth: 70, allowBlank: false}
             ]},
-        { action: 'upload', text: 'Upload', iconCls: 'upload', tooltip: 'Upload'},
+        { action: 'upload', text: 'Upload', iconCls: 'upload', tooltip: 'Upload your Document'},
+        '-',
+        { action: 'selections', text: 'Selections', iconCls: 'checkbox', tooltip: "Enable Multi-Select", enableToggle: true},
+        '-',
+        { action: 'delete', text: 'Delete', iconCls: 'trash', tooltip: "Delete Documents"},
         '->',
         { xtype: 'textfield', name: 'name', emptyText: 'Document Name'},
 
@@ -32,12 +36,12 @@ Ext.define('Share.view.DocList', {
             items: [
                 {
                     iconCls: 'download',
-                    tooltip: 'Download'
+                    tooltip: 'Download Document'
 
                 },
                 {
                     iconCls: 'trash',
-                    tooltip: 'Delete',
+                    tooltip: 'Delete Document',
                     handler: function (grid, rowIndex, colIndex) {
                         var store = grid.getStore();
                         var record = store.getAt(rowIndex);
@@ -64,5 +68,12 @@ Ext.define('Share.view.DocList', {
         pageSize: 15,
         displayInfo: true,
         plugins: Ext.create('Ext.ux.ProgressBarPager')
+    },
+
+    listeners: {
+        viewready: function (grid) {
+            Ext.Array.insert(grid.columns, 0, [grid.columnManager.columns[0]]);
+            grid.columns[0].hide();
+        }
     }
 });

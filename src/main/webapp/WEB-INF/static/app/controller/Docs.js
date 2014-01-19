@@ -20,16 +20,18 @@ Ext.define('Share.controller.Docs', {
 
     init: function () {
         this.control({
-            'viewport > doclist': {
-                itemmouseenter: this.showActions
-            },
             'doclist  button[action=search]': {
                 click: this.searchDocs
             },
             'doclist button[action=upload]': {
                 click: this.upload
+            },
+            'doclist button[action=selections]': {
+                toggle: this.toggleSelections
+            },
+            'doclist button[action=delete]': {
+                click: this.deleteDocs
             }
-
         });
     },
 
@@ -40,7 +42,7 @@ Ext.define('Share.controller.Docs', {
         store.load();
     },
 
-    upload : function(){
+    upload: function () {
         var selectedNodes = this.getDirTree().getSelectionModel().getSelection();
         if (selectedNodes.length == 0) {
             Ext.CommonsMsg.alert("Warnning", "Please select a directory in left navigation tree.");
@@ -49,14 +51,14 @@ Ext.define('Share.controller.Docs', {
         var path = this.getDirTree().getSelectionModel().getSelection()[0].raw.id;
         var store = this.getDocsStore();
         var form = this.getDocList().down("form").getForm();
-        if(form.isValid()){
+        if (form.isValid()) {
             form.submit({
                 url: '/doc/upload',
                 params: {
                     path: path
                 },
                 waitMsg: 'Uploading your shared document ...',
-                success: function(form, action) {
+                success: function (form, action) {
                     store.reload();
                 },
                 failure: function (form, data) {
@@ -69,9 +71,37 @@ Ext.define('Share.controller.Docs', {
 
     },
 
-    showActions: function (grid, record) {
+    toggleSelections: function (btn, pressed) {
+        if (pressed) {
+            this.getDocList().columns[0].show();
+            btn.setTooltip("Disable Multi-Select");
+        } else {
+            this.getDocList().columns[0].hide();
+            btn.setTooltip("Enable Multi-Select");
+        }
+    },
 
+    deleteDocs: function (btn) {
+        var records = this.getDocList().getSelectionModel().getSelection();
+        var idList = new Array();
+        Ext.Array.each(records, function (name, index) {
+            idList.push(records[index].raw.id);
+        });
+        Ext.Ajax.request({
+            url: '/doc/deletes',
+            params: {
+                idList: idList
+            },
+            success: function (response) {
+                var data = Ext.JSON.decode(response.responseText);
+                this.getDocsStore().removeAll(records);
+            },
+            scope: this
+
+        })
     }
+
+
 
 
 });

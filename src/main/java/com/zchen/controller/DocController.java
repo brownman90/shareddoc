@@ -55,5 +55,16 @@ public class DocController {
         return ResponseMap.get().success();
     }
 
+    @RequestMapping("deletes")
+    public
+    @ResponseBody
+    ResponseMap deletes(int[] idList) {
+
+        for (int id : idList) {
+            docService.delete(new Doc(id));
+        }
+        return ResponseMap.get().success();
+    }
+
 
 }

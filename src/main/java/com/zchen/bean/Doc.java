@@ -24,6 +24,13 @@ public class Doc {
 
     private MultipartFile file;
 
+    public Doc() {
+    }
+
+    public Doc(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
