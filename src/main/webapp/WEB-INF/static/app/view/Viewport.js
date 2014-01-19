@@ -4,7 +4,7 @@ Ext.define('Share.view.Viewport', {
     layout: 'border',
     items: [
         {
-            xtype: 'doclist'
+            xtype: 'docgrid'
         },
         {
             xtype: 'dirtree'

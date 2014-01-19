@@ -6,6 +6,7 @@ import com.zchen.service.DocService;
 import com.zchen.utils.ResponseGrid;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileExistsException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,10 +49,13 @@ public class DocServiceImpl implements DocService {
         }
 
         int dotIndex = fileName.lastIndexOf(".");
-        String name = fileName.substring(0, dotIndex);
-        String type = fileName.substring(dotIndex + 1);
-        doc.setName(name);
-        doc.setType(type);
+        if (dotIndex != -1) {
+            doc.setName(fileName.substring(0, dotIndex));
+            doc.setType(fileName.substring(dotIndex + 1));
+        } else {
+            doc.setName(fileName);
+            doc.setType("");
+        }
         doc.setSize(uploadedFile.getSize());
         doc.setCommitter("czc");
         doc.setTime(DateFormat.getDateInstance().format(new Date()));
@@ -72,7 +76,7 @@ public class DocServiceImpl implements DocService {
     @Override
     public void delete(Doc doc) {
         doc = docDao.findById(doc);
-        String fileName = rootAbsolutePath + doc.getPath() + "/" + doc.getName() + (doc.getType().equals("") ? "" : "." + doc.getType());
+        String fileName = rootAbsolutePath + doc.getPath() + "/" + doc.getName() + (StringUtils.isEmpty(doc.getType()) ? "" : "." + doc.getType());
         File file = new File(fileName);
         file.delete();
 

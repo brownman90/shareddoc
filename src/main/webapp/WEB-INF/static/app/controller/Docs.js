@@ -5,12 +5,12 @@ Ext.define('Share.controller.Docs', {
 
     models: [  'Doc' ],
 
-    views: ['DocList'],
+    views: ['DocGrid'],
 
     refs: [
         {
-            ref: 'docList',
-            selector: 'doclist'
+            ref: 'docGrid',
+            selector: 'docgrid'
         },
         {
             ref: 'dirTree',
@@ -20,23 +20,23 @@ Ext.define('Share.controller.Docs', {
 
     init: function () {
         this.control({
-            'doclist  button[action=search]': {
+            'docgrid  button[action=search]': {
                 click: this.searchDocs
             },
-            'doclist button[action=upload]': {
+            'docgrid button[action=upload]': {
                 click: this.upload
             },
-            'doclist button[action=selections]': {
+            'docgrid button[action=selections]': {
                 toggle: this.toggleSelections
             },
-            'doclist button[action=delete]': {
+            'docgrid button[action=delete]': {
                 click: this.deleteDocs
             }
         });
     },
 
     searchDocs: function () {
-        var nameField = this.getDocList().down("textfield[name=name]");
+        var nameField = this.getDocGrid().down("textfield[name=name]");
         var store = this.getDocsStore();
         store.proxy.setExtraParam("name", nameField.getValue());
         store.load();
@@ -50,7 +50,7 @@ Ext.define('Share.controller.Docs', {
         }
         var path = this.getDirTree().getSelectionModel().getSelection()[0].raw.id;
         var store = this.getDocsStore();
-        var form = this.getDocList().down("form").getForm();
+        var form = this.getDocGrid().down("form").getForm();
         if (form.isValid()) {
             form.submit({
                 url: '/doc/upload',
@@ -73,16 +73,16 @@ Ext.define('Share.controller.Docs', {
 
     toggleSelections: function (btn, pressed) {
         if (pressed) {
-            this.getDocList().columns[0].show();
+            this.getDocGrid().columns[0].show();
             btn.setTooltip("Disable Multi-Select");
         } else {
-            this.getDocList().columns[0].hide();
+            this.getDocGrid().columns[0].hide();
             btn.setTooltip("Enable Multi-Select");
         }
     },
 
     deleteDocs: function (btn) {
-        var records = this.getDocList().getSelectionModel().getSelection();
+        var records = this.getDocGrid().getSelectionModel().getSelection();
         var idList = new Array();
         Ext.Array.each(records, function (name, index) {
             idList.push(records[index].raw.id);

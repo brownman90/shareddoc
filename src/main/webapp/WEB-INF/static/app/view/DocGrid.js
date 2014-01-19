@@ -1,6 +1,6 @@
-Ext.define('Share.view.DocList', {
+Ext.define('Share.view.DocGrid', {
     extend: 'Ext.grid.Panel',
-    alias: 'widget.doclist',
+    alias: 'widget.docgrid',
 
     region: 'center',
     title: 'Document List',
@@ -27,7 +27,12 @@ Ext.define('Share.view.DocList', {
         { action: 'search', text: 'Search', iconCls: 'search', tooltip: 'Search Docs' }
     ],
     columns: [
-        {header: 'Name', dataIndex: 'name', flex: 4},
+        {header: 'Name', dataIndex: 'name', flex: 4, renderer: function (value, md, record) {
+            if (record.raw.type.isNotEmpty()) {
+                return value + "<span style='color:gray'>." + record.raw.type + "</span>";
+            }
+            return value;
+        }},
         {header: 'Path', dataIndex: 'path', flex: 2},
         {header: 'Committer', dataIndex: 'committer', flex: 1, align: 'center'},
         {header: 'Post Time', dataIndex: 'time', flex: 1, align: 'center'},
