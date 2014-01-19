@@ -76,10 +76,12 @@ public class DocServiceImpl implements DocService {
     @Override
     public void delete(Doc doc) {
         doc = docDao.findById(doc);
-        String fileName = rootAbsolutePath + doc.getPath() + "/" + doc.getName() + (StringUtils.isEmpty(doc.getType()) ? "" : "." + doc.getType());
-        File file = new File(fileName);
-        file.delete();
+        if (doc != null) {
+            String fileName = rootAbsolutePath + doc.getPath() + "/" + doc.getName() + (StringUtils.isEmpty(doc.getType()) ? "" : "." + doc.getType());
+            File file = new File(fileName);
+            file.delete();
 
-        docDao.delete(doc);
+            docDao.delete(doc);
+        }
     }
 }

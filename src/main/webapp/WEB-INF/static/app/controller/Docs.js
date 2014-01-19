@@ -83,11 +83,11 @@ Ext.define('Share.controller.Docs', {
     },
 
     deleteDocs: function (btn) {
+        var store = this.getDocsStore();
         var records = this.getDocGrid().getSelectionModel().getSelection();
         var confirm = "Are you sure you want to delete " + (records.length == 1 ? "this document." : "these " + records.length + " documents.");
         Ext.Msg.confirm("Confirm", confirm, function (v) {
             if (v === "yes") {
-
                 var idList = new Array();
                 Ext.Array.each(records, function (name, index) {
                     idList.push(records[index].raw.id);
@@ -100,11 +100,10 @@ Ext.define('Share.controller.Docs', {
                     success: function (response) {
                         var result = Ext.JSON.decode(response.responseText);
                         if (result.status)
-                            this.getDocsStore().removeAll(records);
+                            store.removeAll(records);
                         else
                             Ext.CommonsMsg.error('Error', result.message);
-                    },
-                    scope: this
+                    }
                 })
             }
         });

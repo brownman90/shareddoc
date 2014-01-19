@@ -239,7 +239,7 @@ Ext.define('Commons.SimplePropertyGrid', {
 });
 
 String.prototype.isEmpty = function () {
-    return this === null || this === "" || this === undefined;
+    return this == null || this == "" || this == undefined;
 }
 
 String.prototype.isNotEmpty = function () {
