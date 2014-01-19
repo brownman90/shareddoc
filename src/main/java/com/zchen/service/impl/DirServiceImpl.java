@@ -43,8 +43,16 @@ public class DirServiceImpl implements DirService {
     }
 
     @Override
-    public void create(Dir dir) {
+    public void create(Dir dir) throws FileExistsException {
+        String path = rootAbsolutePath + dir.getId();
+        File file = new File(path);
+        if (file.exists()) {
+            throw new FileExistsException("The directory exists.");
+        }
+        boolean result = file.mkdir();
+        if (!result) {
 
+        }
     }
 
     @Override

@@ -40,4 +40,16 @@ public class DirController {
         return ResponseMap.get().success();
     }
 
+    @RequestMapping("/create")
+    public
+    @ResponseBody
+    ResponseMap create(Dir dir) {
+        try {
+            dirService.create(dir);
+        } catch (FileExistsException e) {
+            return ResponseMap.get().failure("Create directory failed. " + e.getMessage());
+        }
+        return ResponseMap.get().success();
+    }
+
 }

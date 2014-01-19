@@ -69,7 +69,28 @@ Ext.define('Share.controller.Dirs', {
     },
 
     createDir: function () {
-
+        var node = this.getDirTree().getSelectionModel().getLastSelected();
+        Ext.Msg.prompt("Create New Directory", "Input new directory name :", function (v, name) {
+            if (v == "ok") {
+                var operation = new Ext.data.Operation({
+                    action: 'create',
+                    params: {
+                        id: node.raw.id + "/" + name,
+                        text: name
+                    }
+                });
+                var store = this.getDirsStore();
+                store.getProxy().create(operation, function (data) {
+                    var result = Ext.JSON.decode(data.response.responseText);
+                    if (result.status) {
+                        node.appendChild({id: node.raw.id + "/" + name, text: name, loaded: true});
+                    } else {
+                        Ext.CommonsMsg.error('Error', result.message);
+                    }
+                    node.expand();
+                });
+            }
+        }, this, true, "New Directory");
     },
 
     deleteDir: function () {

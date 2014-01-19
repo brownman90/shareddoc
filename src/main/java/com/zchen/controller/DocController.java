@@ -40,12 +40,9 @@ public class DocController {
     ResponseMap upload(Doc doc) {
         try {
             docService.upload(doc);
-        } catch (FileExistsException e) {
-            return ResponseMap.get().failure(e.getMessage());
-        } catch (FileUploadBase.FileSizeLimitExceededException e) {
-            return ResponseMap.get().failure(e.getMessage());
+        } catch (FileExistsException | FileUploadBase.FileSizeLimitExceededException e) {
+            return ResponseMap.get().failure("Upload failed. " + e.getMessage());
         }
-
         return ResponseMap.get().success();
     }
 
