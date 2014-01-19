@@ -98,7 +98,8 @@ Ext.define('Share.controller.Dirs', {
 
     deleteDir: function () {
         var node = this.getDirTree().getSelectionModel().getLastSelected();
-        Ext.Msg.confirm("Confirm", "Are you sure you want to delete the directory " + node.raw.id + " ?", function (v) {
+        var confirm = Ext.String.format("Are you sure you want to delete the directory {0} ?", node.raw.id);
+        Ext.Msg.confirm("Confirm", confirm, function (v) {
             if (v === "yes") {
                 var operation = new Ext.data.Operation({
                     action: 'destroy',

@@ -36,4 +36,9 @@ public class ResponseMap extends HashMap {
         return this;
     }
 
+    public ResponseMap setData(Object data) {
+        this.put("data", data);
+        return this;
+    }
+
 }

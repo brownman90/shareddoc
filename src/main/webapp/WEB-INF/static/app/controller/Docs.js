@@ -5,7 +5,7 @@ Ext.define('Share.controller.Docs', {
 
     models: [  'Doc' ],
 
-    views: ['DocGrid'],
+    views: ['DocGrid', 'ConfigWin'],
 
     refs: [
         {
@@ -34,6 +34,12 @@ Ext.define('Share.controller.Docs', {
             },
             'docgrid button[action=delete]': {
                 click: this.deleteDocs
+            },
+            'docgrid tool[action=settings]': {
+                click: this.openConfigWin
+            },
+            'configwin textfield[name=location]': {
+                blur: this.checkLocationSize
             }
         });
     },
@@ -125,5 +131,30 @@ Ext.define('Share.controller.Docs', {
             downloadBtn.enable();
         }
 
+    },
+
+    openConfigWin: function () {
+        Ext.create("Share.view.ConfigWin").show();
+    },
+
+    checkLocationSize: function (field) {
+        var path = field.getValue();
+        Ext.Ajax.request({
+            url: '/config/space',
+            params: {
+                path: path
+            },
+            success: function (res) {
+                var result = Ext.JSON.decode(res.responseText);
+                if (result.status) {
+                    var freeSize = result.data;
+                    var slider = field.up("form").down("slider");
+                    slider.enable();
+                    slider.setMaxValue(freeSize);
+
+                } else
+                    Ext.CommonsMsg.error('Error', result.message);
+            }
+        });
     }
 });

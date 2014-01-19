@@ -73,6 +73,13 @@ Ext.define('Share.view.DocGrid', {
                 }
             ]}
     ],
+    tools: [
+        {
+            type: 'gear',
+            tooltip: 'Settings',
+            action: 'settings'
+        }
+    ],
     bbar: {
         xtype: 'pagingtoolbar',
         store: 'Docs',
