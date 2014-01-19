@@ -29,7 +29,7 @@ Ext.define('Share.controller.Dirs', {
                 click: this.refreshTree
             },
             'dirmenu menuitem[action=refresh]': {
-                click: this.refreshNode
+                click: this.refreshTree
             },
             'dirmenu menuitem[action=create]': {
                 click: this.createDir

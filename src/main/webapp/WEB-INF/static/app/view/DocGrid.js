@@ -19,8 +19,8 @@ Ext.define('Share.view.DocGrid', {
         { action: 'upload', text: 'Upload', iconCls: 'upload', tooltip: 'Upload your Document'},
         '-',
         { action: 'selections', iconCls: 'checkbox', tooltip: "Enable Multi-Select", enableToggle: true},
-        { action: 'delete', text: 'Delete', iconCls: 'trash', tooltip: "Delete Documents"},
-        { action: 'download', text: 'Download', iconCls: 'download', tooltip: "Download Documents"},
+        { action: 'delete', text: 'Delete', iconCls: 'trash', tooltip: "Delete Documents", disabled: true},
+        { action: 'download', text: 'Download', iconCls: 'download', tooltip: "Download Documents", disabled: true},
         '->',
         { xtype: 'textfield', name: 'name', emptyText: 'Document Name'},
 
@@ -83,5 +83,7 @@ Ext.define('Share.view.DocGrid', {
             Ext.Array.insert(grid.columns, 0, [grid.columnManager.columns[0]]);
             grid.columns[0].hide();
         }
+
+
     }
 });

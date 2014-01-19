@@ -20,6 +20,9 @@ Ext.define('Share.controller.Docs', {
 
     init: function () {
         this.control({
+            'docgrid ': {
+                selectionchange: this.selectionchange
+            },
             'docgrid  button[action=search]': {
                 click: this.searchDocs
             },
@@ -107,5 +110,20 @@ Ext.define('Share.controller.Docs', {
                 })
             }
         });
+    },
+
+    selectionchange: function (selModel, records) {
+        var grid = this.getDocGrid();
+        var deleteBtn = grid.down("button[action=delete]"),
+            downloadBtn = grid.down("button[action=download]");
+
+        if (records.length === 0) {
+            deleteBtn.disable();
+            downloadBtn.disable();
+        } else {
+            deleteBtn.enable();
+            downloadBtn.enable();
+        }
+
     }
 });
