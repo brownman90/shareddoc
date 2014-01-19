@@ -1,22 +1,21 @@
 .add {
-    background-image:url(../images/add.png) !important;
+    background-image: url(../images/add.png) !important;
 }
 
 .delete {
-    background-image:url(../images/delete.png) !important;
+    background-image: url(../images/delete.png) !important;
 }
 
 .edit {
-    background-image:url(../images/edit.png) !important;
+    background-image: url(../images/edit.png) !important;
 }
 
-
 .refresh {
-    background-image:url(../images/refresh.png) !important;
+    background-image: url(../images/refresh.png) !important;
 }
 
 .save {
-    background-image:url(../images/save.png) !important;
+    background-image: url(../images/save.png) !important;
 }
 
 .users {
@@ -45,4 +44,12 @@
 
 .upload {
     background-image: url(../images/upload.png) !important;
+}
+
+.trash {
+    background-image: url(../images/trash.png) !important;
+}
+
+.download {
+    background-image: url(../images/download.png) !important;
 }

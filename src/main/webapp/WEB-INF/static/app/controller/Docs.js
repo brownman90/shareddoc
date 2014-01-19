@@ -20,9 +20,8 @@ Ext.define('Share.controller.Docs', {
 
     init: function () {
         this.control({
-            'viewport > userlist': {
-                itemdblclick: this.openProperties,
-                itemcontextmenu: this.userlistContext
+            'viewport > doclist': {
+                itemmouseenter: this.showActions
             },
             'doclist  button[action=search]': {
                 click: this.searchDocs
@@ -60,13 +59,17 @@ Ext.define('Share.controller.Docs', {
                 success: function(form, action) {
                     store.reload();
                 },
-                failure : function(){
-
+                failure: function (form, data) {
+                    Ext.CommonsMsg.error("Error", data.result.message);
                 }
             });
         } else {
             Ext.CommonsMsg.alert("Warnning", "Please select a document to upload.");
         }
+
+    },
+
+    showActions: function (grid, record) {
 
     }
 

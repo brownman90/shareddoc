@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -65,6 +64,15 @@ public class DocDaoImpl implements DocDao {
         return jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(doc), new DocMapper());
     }
 
+    @Override
+    public Doc findById(Doc doc) {
+        String sql = "select * from doc where id=:id";
+        List<Doc> list = jdbcTemplate.query(sql, new BeanPropertySqlParameterSource(doc), new DocMapper());
+        if (list.size() == 0) {
+            return null;
+        }
+        return list.get(0);
+    }
 
     class DocMapper implements RowMapper<Doc> {
         @Override

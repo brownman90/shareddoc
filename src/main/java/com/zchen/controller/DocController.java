@@ -4,6 +4,8 @@ import com.zchen.bean.Doc;
 import com.zchen.service.DocService;
 import com.zchen.utils.ResponseGrid;
 import com.zchen.utils.ResponseMap;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.io.FileExistsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/doc")
@@ -35,8 +36,22 @@ public class DocController {
     @RequestMapping("/upload")
     public @ResponseBody
     ResponseMap upload(Doc doc){
-        docService.upload(doc);
+        try {
+            docService.upload(doc);
+        } catch (FileExistsException e) {
+            return ResponseMap.get().failure(e.getMessage());
+        } catch (FileUploadBase.FileSizeLimitExceededException e) {
+            return ResponseMap.get().failure(e.getMessage());
+        }
 
+        return ResponseMap.get().success();
+    }
+
+    @RequestMapping("delete")
+    public
+    @ResponseBody
+    ResponseMap delete(Doc doc) {
+        docService.delete(doc);
         return ResponseMap.get().success();
     }
 

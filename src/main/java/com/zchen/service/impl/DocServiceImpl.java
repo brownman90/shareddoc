@@ -4,6 +4,8 @@ import com.zchen.bean.Doc;
 import com.zchen.dao.DocDao;
 import com.zchen.service.DocService;
 import com.zchen.utils.ResponseGrid;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.io.FileExistsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,10 +31,16 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public void upload(Doc doc) {
+    public void upload(Doc doc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException {
         MultipartFile uploadedFile = doc.getFile();
         String fileName = uploadedFile.getOriginalFilename();
         File savedFile = new File(rootAbsolutePath + doc.getPath() + "/" + fileName);
+        if (savedFile.exists()) {
+            throw new FileExistsException(fileName + " exists in " + rootAbsolutePath + doc.getPath() + "/ .");
+        }
+        if (uploadedFile.getSize() > 20000000) {
+            throw new FileUploadBase.FileSizeLimitExceededException(String.format("File size(%d) exceeds max upload limit(%d).", uploadedFile.getSize(), 20000000), uploadedFile.getSize(), 20000000);
+        }
         try {
             uploadedFile.transferTo(savedFile);
         } catch (IOException e) {
@@ -48,6 +56,7 @@ public class DocServiceImpl implements DocService {
         doc.setCommitter("czc");
         doc.setTime(DateFormat.getDateInstance().format(new Date()));
         docDao.insert(doc);
+
     }
 
     @Override
@@ -62,6 +71,11 @@ public class DocServiceImpl implements DocService {
 
     @Override
     public void delete(Doc doc) {
+        doc = docDao.findById(doc);
+        String fileName = rootAbsolutePath + doc.getPath() + "/" + doc.getName() + (doc.getType().equals("") ? "" : "." + doc.getType());
+        File file = new File(fileName);
+        file.delete();
 
+        docDao.delete(doc);
     }
 }

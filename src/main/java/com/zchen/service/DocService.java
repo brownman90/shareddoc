@@ -2,8 +2,8 @@ package com.zchen.service;
 
 import com.zchen.bean.Doc;
 import com.zchen.utils.ResponseGrid;
-
-import java.util.List;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.io.FileExistsException;
 
 /**
  * @author Zhouce Chen
@@ -13,7 +13,7 @@ public interface DocService {
 
     public ResponseGrid query(Doc doc, int start, int limit);
 
-    public void upload(Doc doc);
+    public void upload(Doc doc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException;
 
     public void download(Doc doc);
 

@@ -84,6 +84,20 @@ Ext.define('Commons.MessageBox', {
             };
         }
         return this.show(cfg);
+    },
+    error: function (cfg, msg, fn, scope) {
+        if (Ext.isString(cfg)) {
+            cfg = {
+                title: cfg,
+                msg: msg,
+                buttons: this.OK,
+                fn: fn,
+                scope: scope,
+                minWidth: this.minWidth,
+                icon: Ext.MessageBox.ERROR
+            };
+        }
+        return this.show(cfg);
     }
 },function() {
     Ext.CommonsMsg = new this();

@@ -9,25 +9,54 @@ Ext.define('Share.view.DocList', {
     selType: 'checkboxmodel',
     tbar: [
         {
-            xtype:'form',
-            border : false,
+            xtype: 'form',
+            border: false,
             padding: '3 0 0 0',
-            height : 29,
-            items:[
-            {xtype: 'filefield', name: 'file', emptyText: 'Select Document', labelWidth: 70, allowBlank:false}
-        ]},
-        { action:'upload' ,text:'Upload', iconCls:'upload', tooltip: 'Upload'},
+            height: 29,
+            items: [
+                {xtype: 'filefield', name: 'file', emptyText: 'Select Document', labelWidth: 70, allowBlank: false}
+            ]},
+        { action: 'upload', text: 'Upload', iconCls: 'upload', tooltip: 'Upload'},
         '->',
         { xtype: 'textfield', name: 'name', emptyText: 'Document Name'},
 
         { action: 'search', text: 'Search', iconCls: 'search', tooltip: 'Search Docs' }
     ],
     columns: [
-        {header: 'Name', dataIndex: 'name', flex: 1},
-        {header: 'Size', dataIndex: 'size', flex: 1},
-        {header: 'Path', dataIndex: 'path', flex: 1},
-        {header: 'Committer', dataIndex: 'committer', flex: 1},
-        {header: 'Post Time', dataIndex: 'time', flex: 1},
+        {header: 'Name', dataIndex: 'name', flex: 4},
+        {header: 'Path', dataIndex: 'path', flex: 2},
+        {header: 'Committer', dataIndex: 'committer', flex: 1, align: 'center'},
+        {header: 'Post Time', dataIndex: 'time', flex: 1, align: 'center'},
+        {xtype: 'actioncolumn', menuDisabled: true, align: 'center', text: 'Actions',
+            width: 80,
+            items: [
+                {
+                    iconCls: 'download',
+                    tooltip: 'Download'
+
+                },
+                {
+                    iconCls: 'trash',
+                    tooltip: 'Delete',
+                    handler: function (grid, rowIndex, colIndex) {
+                        var store = grid.getStore();
+                        var record = store.getAt(rowIndex);
+                        Ext.Msg.confirm("Confirm", "Are you sure you want to delete this document?", function (v) {
+                            if (v === "yes") {
+                                var operation = new Ext.data.Operation({
+                                    action: 'destroy',
+                                    id: record.raw.id
+                                });
+                                store.getProxy().destroy(operation, function (data) {
+                                    if (data.success) {
+                                        store.remove(record);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            ]}
     ],
     bbar: {
         xtype: 'pagingtoolbar',

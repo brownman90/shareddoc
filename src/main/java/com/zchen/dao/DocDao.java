@@ -18,4 +18,6 @@ public interface DocDao {
     public int count();
 
     public List<Doc> query(Doc doc, int start, int limit);
+
+    public Doc findById(Doc doc);
 }
