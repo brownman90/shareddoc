@@ -14,6 +14,8 @@ public class Doc {
 
     private String type;
 
+    private String fullName;
+
     private Long size;
 
     private String time;
@@ -53,6 +55,14 @@ public class Doc {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Long getSize() {

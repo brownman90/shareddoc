@@ -35,5 +35,6 @@
 
     <mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
 
+    <bean class="com.zchen.base.MyListener"/>
 
 </beans>

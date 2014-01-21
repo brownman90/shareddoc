@@ -7,7 +7,7 @@ Ext.define('Commons.Window', {
     modal: true,
     collapsible: true,
     constrainHeader: true,
-    maximizable : true,
+    maximizable: true,
 
     initComponent: function () {
 
@@ -56,31 +56,31 @@ Ext.define('Commons.MessageBox', {
     extend: 'Ext.window.MessageBox',
     alias: 'widget.commonsmessage',
 
-    alert: function(cfg, msg, fn, scope) {
+    alert: function (cfg, msg, fn, scope) {
         if (Ext.isString(cfg)) {
             cfg = {
-                title : cfg,
-                msg : msg,
+                title: cfg,
+                msg: msg,
                 buttons: this.OK,
                 fn: fn,
-                scope : scope,
+                scope: scope,
                 minWidth: this.minWidth,
-                icon : Ext.MessageBox.WARNING
+                icon: Ext.MessageBox.WARNING
             };
         }
         return this.show(cfg);
     },
 
-    info: function(cfg, msg, fn, scope) {
+    info: function (cfg, msg, fn, scope) {
         if (Ext.isString(cfg)) {
             cfg = {
-                title : cfg,
-                msg : msg,
+                title: cfg,
+                msg: msg,
                 buttons: this.OK,
                 fn: fn,
-                scope : scope,
+                scope: scope,
                 minWidth: this.minWidth,
-                icon : Ext.MessageBox.INFO
+                icon: Ext.MessageBox.INFO
             };
         }
         return this.show(cfg);
@@ -99,7 +99,7 @@ Ext.define('Commons.MessageBox', {
         }
         return this.show(cfg);
     }
-},function() {
+}, function () {
     Ext.CommonsMsg = new this();
 });
 
@@ -246,3 +246,19 @@ String.prototype.isNotEmpty = function () {
     return !this.isEmpty();
 }
 
+
+function CommonsUtils() {
+}
+
+CommonsUtils.readableSize = function (size) {
+    var units = ['B', 'KB', 'MB', 'GB'];
+    var i = 0;
+    var resultSize = '';
+    var unit = units[0];
+    while (size > 1024) {
+        unit = units[++i];
+        resultSize = Math.floor(size * 100 / 1024) / 100;
+        size = size / 1024;
+    }
+    return resultSize + unit;
+}

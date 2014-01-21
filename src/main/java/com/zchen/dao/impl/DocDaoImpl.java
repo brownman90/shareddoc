@@ -53,10 +53,10 @@ public class DocDaoImpl implements DocDao {
     public List<Doc> query(Doc doc, int start, int limit) {
         StringBuilder sb = new StringBuilder("select * from doc  where 1=1 ");
         if (StringUtils.isNotEmpty(doc.getName())) {
-            doc.setName("%"+doc.getName()+"%");
+            doc.setName("%" + doc.getName() + "%");
             sb.append("and name like :name");
         }
-        if(StringUtils.isNotEmpty(doc.getPath())){
+        if (StringUtils.isNotEmpty(doc.getPath())) {
             doc.setPath(doc.getPath() + "%");
             sb.append(" and  path like :path");
         }
@@ -85,7 +85,11 @@ public class DocDaoImpl implements DocDao {
             doc.setTime(rs.getString("time"));
             doc.setCommitter(rs.getString("committer"));
             doc.setPath(rs.getString("path"));
-
+            if (doc.getType().equals("")) {
+                doc.setFullName(doc.getName());
+            } else {
+                doc.setFullName(doc.getName() + "." + doc.getType());
+            }
             return doc;
         }
     }

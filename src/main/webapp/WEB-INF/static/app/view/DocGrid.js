@@ -34,7 +34,7 @@ Ext.define('Share.view.DocGrid', {
             return value;
         }},
         {header: 'Size', dataIndex: 'size', flex: 1, renderer: function (value) {
-            return value;
+            return CommonsUtils.readableSize(value);
         }},
         {header: 'Path', dataIndex: 'path', flex: 2},
         {header: 'Committer', dataIndex: 'committer', flex: 1, align: 'center'},
@@ -44,8 +44,15 @@ Ext.define('Share.view.DocGrid', {
             items: [
                 {
                     iconCls: 'download',
-                    tooltip: 'Download Document'
-
+                    tooltip: 'Download Document',
+                    handler: function (grid, rowIndex) {
+                        Ext.Msg.confirm("Confirm", "Are you sure you want to delete this document?", function (v) {
+                            if (v === "yes") {
+                                var id = grid.getStore().getAt(rowIndex).raw.id;
+                                window.open("/doc/download?id=" + id);
+                            }
+                        });
+                    }
                 },
                 {
                     iconCls: 'trash',

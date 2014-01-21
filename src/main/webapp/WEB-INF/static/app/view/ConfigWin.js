@@ -47,7 +47,7 @@ Ext.define('Share.view.ConfigWin', {
                                         xtype: 'slider',
                                         name: 'limit',
                                         hideEmptyLabel: false,
-                                        disabled: true,
+//                                        disabled: true,
                                         value: 0,
                                         minValue: 0,
                                         maxValue: 100,

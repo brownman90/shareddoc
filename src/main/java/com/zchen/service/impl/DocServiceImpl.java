@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -63,8 +63,22 @@ public class DocServiceImpl implements DocService {
 
     }
 
-    @Override
-    public void download(Doc doc) {
+    public void download(Doc doc, HttpServletResponse response)
+            throws IOException {
+        File srcFile = new File(rootAbsolutePath + doc.getPath() + doc.getFullName());
+        InputStream inputStream = new FileInputStream(srcFile);
+        OutputStream os = response.getOutputStream();
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition", "attachment;fileName="
+                + doc.getFullName());
+
+        byte[] b = new byte[1024];
+        int length;
+        while ((length = inputStream.read(b)) > 0) {
+            os.write(b, 0, length);
+        }
+        inputStream.close();
 
     }
 
@@ -83,5 +97,10 @@ public class DocServiceImpl implements DocService {
 
             docDao.delete(doc);
         }
+    }
+
+    @Override
+    public Doc findById(Doc doc) {
+        return docDao.findById(doc);
     }
 }

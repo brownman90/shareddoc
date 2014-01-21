@@ -138,6 +138,7 @@ Ext.define('Share.controller.Docs', {
     },
 
     checkLocationSize: function (field) {
+        var limitSlider = field.up("form").down("slider[itemId=limit]");
         var path = field.getValue();
         Ext.Ajax.request({
             url: '/config/space',
@@ -148,9 +149,8 @@ Ext.define('Share.controller.Docs', {
                 var result = Ext.JSON.decode(res.responseText);
                 if (result.status) {
                     var freeSize = result.data;
-                    var slider = field.up("form").down("slider");
-                    slider.enable();
-                    slider.setMaxValue(freeSize);
+                    var limitSlider = field.up("form").down("slider[itemId=limit]");
+                    limitSlider.setMaxValue(freeSize);
 
                 } else
                     Ext.CommonsMsg.error('Error', result.message);

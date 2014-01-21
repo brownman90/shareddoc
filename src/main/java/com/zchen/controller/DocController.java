@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/doc")
@@ -45,6 +48,29 @@ public class DocController {
         }
         return ResponseMap.get().success();
     }
+
+    @RequestMapping("/download")
+    public String download(HttpServletResponse response, Doc doc, ModelMap model)
+            throws Exception {
+        Doc file = docService.findById(doc);
+        if (file == null) {
+            model.put("status", false);
+            model.put("message", "\"该文件不存在，可能已被删除。\"");
+            return "share/files";
+        }
+        try {
+            docService.download(file, response);
+        } catch (FileNotFoundException e) {
+            model.put("status", false);
+            model.put("message", "\"该文件不存在，可能已被删除。\"");
+            // docService.delete(doc);
+            return "share/files";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @RequestMapping("delete")
     public
