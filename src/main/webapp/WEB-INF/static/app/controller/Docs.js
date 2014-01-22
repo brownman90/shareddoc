@@ -152,6 +152,8 @@ Ext.define('Share.controller.Docs', {
 
                 var exceedField = form.down("displayslider[itemId=exceed]");
                 exceedField.setValue(result.exceed);
+
+
             }
         });
     },
@@ -170,6 +172,7 @@ Ext.define('Share.controller.Docs', {
                     var freeSize = result.data;
                     var limitSlider = field.up("form").down("slider[itemId=limit]");
                     limitSlider.setMaxValue(freeSize);
+
 
                 } else
                     Ext.CommonsMsg.error('Error', result.message);

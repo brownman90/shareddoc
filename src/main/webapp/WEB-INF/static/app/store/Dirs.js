@@ -1,5 +1,6 @@
 Ext.define('Share.store.Dirs', {
     extend: 'Ext.data.TreeStore',
+    autoLoad: true,
     proxy: {
         type: 'ajax',
         api: {

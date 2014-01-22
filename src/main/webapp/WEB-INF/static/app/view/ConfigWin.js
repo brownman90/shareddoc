@@ -21,10 +21,10 @@ Ext.define('Share.view.ConfigWin', {
                         },
                         items: [
                             {
-                                xtype: 'textfield',
-                                name: 'location',
+                                xtype: 'browserfield',
                                 fieldLabel: 'Location',
-                                allowBlank: false
+                                name: 'location'
+
                             },
                             {
                                 xtype: 'textslider',
@@ -32,6 +32,7 @@ Ext.define('Share.view.ConfigWin', {
                                 itemId: 'limit',
                                 fieldLabel: 'Max Capacity',
                                 vtype: 'disk',
+                                combineErrors: true,
                                 allowBlank: false,
                                 useTips: true,
                                 tipText: function (thumb) {

@@ -13,7 +13,8 @@ Ext.define('Commons.Window', {
         this.buttons = [
             {
                 text: 'Save',
-                action: 'save'
+                action: 'save',
+                handler: this.saveHandler
             },
             {
                 text: 'Cancel',
@@ -327,6 +328,14 @@ Ext.define('Commons.Form.DisplaySliderField', {
 
     setMaxValue: function (value) {
         this.down("slider").setMaxValue(value);
+    },
+
+    getValue: function () {
+        return this.down("slider").getValue();
+    },
+
+    getFormatterValue: function () {
+        return this.down("displayfield").getValue();
     }
 });
 
@@ -399,6 +408,14 @@ Ext.define('Commons.Form.TextSliderField', {
 
     setMaxValue: function (value) {
         this.down("slider").setMaxValue(value);
+    },
+
+    getValue: function () {
+        return this.down("slider").getValue();
+    },
+
+    getFormatterValue: function () {
+        return this.down("textfield").getValue();
     }
 });
 
@@ -417,3 +434,92 @@ Ext.apply(Ext.form.field.VTypes, {
     },
     diskText: 'Must add B/KB/MB/GB at the end of number with no blank.'
 });
+
+Ext.define('Commons.Form.BrowserField', {
+    extend: 'Ext.form.FieldContainer',
+    alias: 'widget.browserfield',
+    layout: 'hbox',
+    defaults: {
+        hideLabel: 'true'
+    },
+    initComponent: function () {
+        var me = this;
+        this.items = [
+            {
+                xtype: 'textfield',
+                anchor: '100%',
+                flex: 1,
+                name: me.name,
+                readOnly: me.readOnly
+            },
+            {
+                xtype: 'button',
+                text: me.text || ' ... ',
+                iconCls: me.iconCls,
+                margin: '0 0 0 5',
+                handler: function () {
+                    Ext.create("Commons.Window.BrowserWindow").show();
+                }
+            }
+        ]
+        this.callParent(arguments);
+    },
+
+    setValue: function (value) {
+        this.down("textfield").setValue(value);
+    },
+
+    getValue: function () {
+        return this.down("textfield").getValue();
+    }
+});
+
+Ext.define('Commons.Window.BrowserWindow', {
+    extend: 'Commons.Window',
+    alias: 'widget.browserwindow',
+    title: this.title || 'Browser',
+    width: 400,
+    height: 400,
+    initComponent: function () {
+        var me = this;
+
+        this.items = [
+            {
+                xtype: 'treepanel',
+                region: 'center',
+                border: false,
+                store: 'Dirs',
+                layout: 'fit',
+                tbar: [
+                    {
+                        iconCls: 'home',
+                        tooltip: 'Home Directory'
+                    },
+                    '-',
+                    {
+                        iconCls: 'add',
+                        tooltip: 'Create Directory'
+                    },
+                    {
+                        iconCls: 'delete',
+                        tooltip: 'Delete Directory'
+                    },
+                    '-',
+                    {
+                        iconCls: 'refresh',
+                        tooltip: 'Refresh',
+                        handler: function () {
+                            me.down("treepanel").getStore().reload();
+                        }
+                    }
+                ]
+
+
+            }
+        ];
+
+
+        this.callParent(arguments);
+    }
+});
+
