@@ -288,14 +288,15 @@ Ext.define('Commons.Form.DisplaySliderField', {
         this.items = [
             {
                 xtype: 'displayfield',
-                padding: '0 0 0 8',
                 value: this.value,
+                fieldStyle: 'padding-left:8px',
                 flex: 2
             },
             {
                 xtype: 'slider',
                 name: this.name,
                 value: this.value,
+                increment: this.sliderStep,
                 padding: '0 0 0 5',
                 minValue: this.minValue || 0,
                 maxValue: this.maxValue || 100,
@@ -318,9 +319,9 @@ Ext.define('Commons.Form.DisplaySliderField', {
 
     setValue: function (value) {
         if (this.displayFormatter)
-            this.down("textfield").setValue(this.displayFormatter(value));
+            this.down("displayfield").setValue(this.displayFormatter(value));
         else
-            this.down("textfield").setValue(value);
+            this.down("displayfield").setValue(value);
         this.down("slider").setValue(value);
     },
 
@@ -347,12 +348,14 @@ Ext.define('Commons.Form.TextSliderField', {
                 value: this.value,
                 allowBlank: this.allowBlank,
                 vtype: this.vtype,
-                step: this.step,
+                step: this.numberStep,
                 min: this.min || 0,
                 max: this.max || 0,
                 flex: 2,
                 listeners: {
                     blur: function (field) {
+                        if (!field.isValid())
+                            return;
                         var value = field.getValue();
                         var slider = me.down("slider");
                         if (me.sliderFormatter)
@@ -366,6 +369,7 @@ Ext.define('Commons.Form.TextSliderField', {
                 name: this.name,
                 value: this.value,
                 padding: '0 0 0 5',
+                increment: this.sliderStep,
                 minValue: this.minValue || 0,
                 maxValue: this.maxValue || 100,
                 useTips: this.useTips,

@@ -12,6 +12,8 @@ public class Config {
 
     private long freeSpace;
 
+    private int exceed;
+
     public String getLocation() {
         return location;
     }
@@ -34,5 +36,13 @@ public class Config {
 
     public void setFreeSpace(long freeSpace) {
         this.freeSpace = freeSpace;
+    }
+
+    public int getExceed() {
+        return exceed;
+    }
+
+    public void setExceed(int exceed) {
+        this.exceed = exceed;
     }
 }

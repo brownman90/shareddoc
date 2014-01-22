@@ -29,6 +29,7 @@ public class ConfigController {
         config.setLocation("D:/shared_doc");
         config.setLimit(new Long("30000000000"));
         config.setFreeSpace(configService.getFreeSpace("D:/shared_doc"));
+        config.setExceed(85);
         return ResponseMap.get().success().setData(config);
     }
 

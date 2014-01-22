@@ -145,12 +145,13 @@ Ext.define('Share.controller.Docs', {
             url: '/config/settings',
             success: function (f, action) {
                 var result = action.result.data;
-                var limit = result.limit;
-                var freeSpace = result.freeSpace;
 
-                var textfield = form.down("textslider");
-                textfield.setMaxValue(freeSpace);
-                textfield.setValue(limit);
+                var limitField = form.down("textslider[itemId=limit]");
+                limitField.setMaxValue(result.freeSpace);
+                limitField.setValue(result.limit);
+
+                var exceedField = form.down("displayslider[itemId=exceed]");
+                exceedField.setValue(result.exceed);
             }
         });
     },

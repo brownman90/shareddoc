@@ -42,6 +42,20 @@ Ext.define('Share.view.ConfigWin', {
                                 },
                                 displayFormatter: CommonsUtils.readableSize,
                                 sliderFormatter: CommonsUtils.disReadableSize
+                            },
+                            {
+                                xtype: 'displayslider',
+                                name: 'exceed',
+                                itemId: 'exceed',
+                                fieldLabel: 'Exceed Warn',
+                                sliderStep: 5,
+                                useTips: true,
+                                tipText: function (thumb) {
+                                    return thumb.value + "%";
+                                },
+                                displayFormatter: function (value) {
+                                    return value + "%";
+                                }
                             }
                         ]
                     }
