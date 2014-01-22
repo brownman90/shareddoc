@@ -15,6 +15,10 @@ Ext.define('Share.controller.Docs', {
         {
             ref: 'dirTree',
             selector: 'dirtree'
+        },
+        {
+            ref: 'configWin',
+            selector: 'configwin'
         }
     ],
 
@@ -135,6 +139,20 @@ Ext.define('Share.controller.Docs', {
 
     openConfigWin: function () {
         Ext.create("Share.view.ConfigWin").show();
+
+        var form = this.getConfigWin().down("form");
+        form.load({
+            url: '/config/settings',
+            success: function (f, action) {
+                var result = action.result.data;
+                var limit = result.limit;
+                var freeSpace = result.freeSpace;
+
+                var textfield = form.down("textslider");
+                textfield.setMaxValue(freeSpace);
+                textfield.setValue(limit);
+            }
+        });
     },
 
     checkLocationSize: function (field) {

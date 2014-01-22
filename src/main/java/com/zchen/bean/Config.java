@@ -10,6 +10,8 @@ public class Config {
 
     private long limit;
 
+    private long freeSpace;
+
     public String getLocation() {
         return location;
     }
@@ -24,5 +26,13 @@ public class Config {
 
     public void setLimit(long limit) {
         this.limit = limit;
+    }
+
+    public long getFreeSpace() {
+        return freeSpace;
+    }
+
+    public void setFreeSpace(long freeSpace) {
+        this.freeSpace = freeSpace;
     }
 }

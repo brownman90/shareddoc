@@ -1,5 +1,6 @@
 package com.zchen.controller;
 
+import com.zchen.bean.Config;
 import com.zchen.service.ConfigService;
 import com.zchen.utils.ResponseMap;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,17 @@ public class ConfigController {
 
     @Resource
     private ConfigService configService;
+
+    @RequestMapping("/settings")
+    public
+    @ResponseBody
+    ResponseMap settings() throws FileNotFoundException {
+        Config config = new Config();
+        config.setLocation("D:/shared_doc");
+        config.setLimit(new Long("30000000000"));
+        config.setFreeSpace(configService.getFreeSpace("D:/shared_doc"));
+        return ResponseMap.get().success().setData(config);
+    }
 
 
     @RequestMapping("/space")

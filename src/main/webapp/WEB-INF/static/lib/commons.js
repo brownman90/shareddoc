@@ -7,7 +7,6 @@ Ext.define('Commons.Window', {
     modal: true,
     collapsible: true,
     constrainHeader: true,
-    maximizable: true,
 
     initComponent: function () {
 
@@ -36,7 +35,6 @@ Ext.define('Commons.SimpleWindow', {
     modal: true,
     collapsible: true,
     constrainHeader: true,
-    maximizable: true,
 
     initComponent: function () {
 
@@ -253,7 +251,7 @@ function CommonsUtils() {
 CommonsUtils.readableSize = function (size) {
     var units = ['B', 'KB', 'MB', 'GB'];
     var i = 0;
-    var resultSize = '';
+    var resultSize = '0';
     var unit = units[0];
     while (size > 1024) {
         unit = units[++i];
@@ -262,3 +260,156 @@ CommonsUtils.readableSize = function (size) {
     }
     return resultSize + unit;
 }
+
+CommonsUtils.disReadableSize = function (value) {
+    var units = ['KB', 'MB', 'GB'];
+    var units = {
+        'KB': 1024,
+        'MB': 1024 * 1024,
+        'GB': 1024 * 1024 * 1024
+    };
+    for (var k in units) {
+        if (value.indexOf(k) > -1) {
+            return value.split(k)[0] * units[k];
+        }
+    }
+    return value;
+}
+
+Ext.define('Commons.Form.DisplaySliderField', {
+    extend: 'Ext.form.FieldContainer',
+    alias: 'widget.displayslider',
+    layout: 'hbox',
+    defaults: {
+        hideLabel: 'true'
+    },
+    initComponent: function () {
+        var me = this;
+        this.items = [
+            {
+                xtype: 'displayfield',
+                padding: '0 0 0 8',
+                value: this.value,
+                flex: 2
+            },
+            {
+                xtype: 'slider',
+                name: this.name,
+                value: this.value,
+                padding: '0 0 0 5',
+                minValue: this.minValue || 0,
+                maxValue: this.maxValue || 100,
+                useTips: this.useTips,
+                tipText: this.tipText,
+                flex: 3,
+                margins: '4 0 0 0',
+                listeners: {
+                    changecomplete: function (slider, value, thumb) {
+                        var displayField = me.down("displayfield");
+                        if (me.displayFormatter)
+                            value = me.displayFormatter(value);
+                        displayField.setValue(value);
+                    }
+                }
+            }
+        ]
+        this.callParent(arguments);
+    },
+
+    setValue: function (value) {
+        if (this.displayFormatter)
+            this.down("textfield").setValue(this.displayFormatter(value));
+        else
+            this.down("textfield").setValue(value);
+        this.down("slider").setValue(value);
+    },
+
+    setMaxValue: function (value) {
+        this.down("slider").setMaxValue(value);
+    }
+});
+
+Ext.define('Commons.Form.TextSliderField', {
+    extend: 'Ext.form.FieldContainer',
+    alias: 'widget.textslider',
+    layout: 'hbox',
+    defaults: {
+        hideLabel: 'true'
+    },
+    initComponent: function () {
+        var me = this;
+        this.textType = "textfield";
+        if (me.isNumber)
+            this.textType = 'numberfield';
+        this.items = [
+            {
+                xtype: this.textType,
+                value: this.value,
+                allowBlank: this.allowBlank,
+                vtype: this.vtype,
+                step: this.step,
+                min: this.min || 0,
+                max: this.max || 0,
+                flex: 2,
+                listeners: {
+                    blur: function (field) {
+                        var value = field.getValue();
+                        var slider = me.down("slider");
+                        if (me.sliderFormatter)
+                            value = me.sliderFormatter(value);
+                        slider.setValue(value);
+                    }
+                }
+            },
+            {
+                xtype: 'slider',
+                name: this.name,
+                value: this.value,
+                padding: '0 0 0 5',
+                minValue: this.minValue || 0,
+                maxValue: this.maxValue || 100,
+                useTips: this.useTips,
+                tipText: this.tipText,
+                flex: 3,
+                margins: '4 0 0 0',
+                listeners: {
+                    changecomplete: function (slider, value, thumb) {
+                        var textfield = me.down("textfield");
+                        if (me.displayFormatter)
+                            value = me.displayFormatter(value);
+                        textfield.setValue(value);
+                    }
+                }
+            }
+        ]
+        this.callParent(arguments);
+    },
+
+    setValue: function (value) {
+        if (this.displayFormatter)
+            this.down("textfield").setValue(this.displayFormatter(value));
+        else
+            this.down("textfield").setValue(value);
+        this.down("slider").setValue(value);
+    },
+
+    setMaxValue: function (value) {
+        this.down("slider").setMaxValue(value);
+    }
+});
+
+
+Ext.apply(Ext.form.field.VTypes, {
+    IP: function (v) {
+        return /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(v);
+    },
+    IPText: 'Must be a numeric IP address',
+    IPMask: /[\d\.]/i
+});
+
+Ext.apply(Ext.form.field.VTypes, {
+    disk: function (v) {
+        return /^(\d(.\d+)?)*(G|M|K)?B$/.test(v);
+    },
+    diskText: 'Must add B/KB/MB/GB at the end of number with no blank.'
+});
