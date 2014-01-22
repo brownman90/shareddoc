@@ -1,6 +1,7 @@
 Ext.define('Share.store.Dirs', {
     extend: 'Ext.data.TreeStore',
     autoLoad: true,
+    model: 'Share.model.Dir',
     proxy: {
         type: 'ajax',
         api: {
@@ -12,7 +13,7 @@ Ext.define('Share.store.Dirs', {
     },
     root: {
         id: '/',
-        text: 'Root',
+        name: 'Root',
         expanded: true
     }
 

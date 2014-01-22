@@ -13,7 +13,7 @@ Ext.define('Share.view.DirMenu', {
             '-',
             {
                 action: 'create',
-                text: 'Create ...'
+                text: 'New Folder ...'
             },
             {
                 action: 'delete',

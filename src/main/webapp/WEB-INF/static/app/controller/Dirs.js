@@ -73,7 +73,7 @@ Ext.define('Share.controller.Dirs', {
 
     createDir: function () {
         var node = this.getDirTree().getSelectionModel().getLastSelected();
-        Ext.Msg.prompt("Create New Directory", "Input new directory name :", function (v, name) {
+        Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
             if (v == "ok") {
                 var operation = new Ext.data.Operation({
                     action: 'create',
@@ -93,7 +93,7 @@ Ext.define('Share.controller.Dirs', {
                     node.expand();
                 });
             }
-        }, this, true, "New Directory");
+        });
     },
 
     deleteDir: function () {

@@ -8,15 +8,15 @@ import java.util.List;
  */
 public class Dir {
     private String id;
-    private String text;
+    private String name;
     private List<Dir> children;
 
     public Dir() {
     }
 
-    public Dir(String id, String text) {
+    public Dir(String id, String name) {
         this.id = id;
-        this.text = text;
+        this.name = name;
     }
 
     public String getId() {
@@ -27,12 +27,12 @@ public class Dir {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getName() {
+        return name;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Dir> getChildren() {

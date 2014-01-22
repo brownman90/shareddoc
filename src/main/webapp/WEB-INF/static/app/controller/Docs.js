@@ -145,13 +145,19 @@ Ext.define('Share.controller.Docs', {
             url: '/config/settings',
             success: function (f, action) {
                 var result = action.result.data;
+                var limit = result.limit,
+                    exceed = result.exceed,
+                    freeSpace = result.freeSpace;
 
                 var limitField = form.down("textslider[itemId=limit]");
-                limitField.setMaxValue(result.freeSpace);
-                limitField.setValue(result.limit);
+                if (freeSpace < limit)
+                    limit = freeSpace;
+                limitField.setMaxValue(freeSpace);
+
+                limitField.setValue(limit);
 
                 var exceedField = form.down("displayslider[itemId=exceed]");
-                exceedField.setValue(result.exceed);
+                exceedField.setValue(exceed);
 
 
             }

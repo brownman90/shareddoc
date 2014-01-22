@@ -1,6 +1,7 @@
 package com.zchen.controller;
 
 import com.zchen.bean.Config;
+import com.zchen.bean.Dir;
 import com.zchen.service.ConfigService;
 import com.zchen.utils.ResponseMap;
 import org.springframework.stereotype.Controller;
@@ -8,7 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Zhouce Chen
@@ -45,6 +50,34 @@ public class ConfigController {
             return ResponseMap.get().failure(e.getMessage());
         }
         return ResponseMap.get().success().setData(freeSize);
+    }
+
+    @RequestMapping("/directoryList")
+    public
+    @ResponseBody
+    Dir directoryList(String node) {
+        Dir root = new Dir();
+        File[] files;
+        if (node.equals("root")) {
+            files = File.listRoots();
+        } else {
+            FileFilter ff = new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return pathname.isDirectory();
+                }
+            };
+            files = new File(node).listFiles(ff);
+        }
+        List<Dir> children = new ArrayList<>();
+        for (File file : files) {
+            String dirName = file.getName().equals("") ? file.getAbsolutePath() : file.getName();
+            Dir dir = new Dir(file.getAbsolutePath(), dirName);
+            children.add(dir);
+        }
+        root.setChildren(children);
+
+        return root;
     }
 
 

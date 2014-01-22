@@ -23,7 +23,10 @@ Ext.define('Share.view.ConfigWin', {
                             {
                                 xtype: 'browserfield',
                                 fieldLabel: 'Location',
-                                name: 'location'
+                                name: 'location',
+                                browserWindow: {
+                                    url: '/config/directoryList'
+                                }
 
                             },
                             {

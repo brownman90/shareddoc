@@ -9,7 +9,7 @@ Ext.define('Share.view.DirTree', {
     collapsible: true,
     layout: 'fit',
     border: false,
-
+    displayField: 'name',
     useArrows: true,
     store: 'Dirs',
 

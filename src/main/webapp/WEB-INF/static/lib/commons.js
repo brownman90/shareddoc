@@ -444,6 +444,7 @@ Ext.define('Commons.Form.BrowserField', {
     },
     initComponent: function () {
         var me = this;
+        me.browserWindow = Ext.apply({browserField: this}, me.browserWindow);
         this.items = [
             {
                 xtype: 'textfield',
@@ -458,7 +459,7 @@ Ext.define('Commons.Form.BrowserField', {
                 iconCls: me.iconCls,
                 margin: '0 0 0 5',
                 handler: function () {
-                    Ext.create("Commons.Window.BrowserWindow").show();
+                    Ext.create("Commons.Window.BrowserWindow", me.browserWindow).show();
                 }
             }
         ]
@@ -478,17 +479,27 @@ Ext.define('Commons.Window.BrowserWindow', {
     extend: 'Commons.Window',
     alias: 'widget.browserwindow',
     title: this.title || 'Browser',
-    width: 400,
-    height: 400,
+    width: this.width || 350,
+    height: this.height || 380,
     initComponent: function () {
         var me = this;
+
+        this.store = Ext.create('Ext.data.TreeStore', {
+            fields: this.fields || ['id', 'name'],
+            proxy: {
+                type: 'ajax',
+                url: this.url
+            }
+        });
 
         this.items = [
             {
                 xtype: 'treepanel',
                 region: 'center',
+                rootVisible: false,
+                displayField: this.displayField || 'name',
                 border: false,
-                store: 'Dirs',
+                store: this.store,
                 layout: 'fit',
                 tbar: [
                     {
@@ -512,7 +523,12 @@ Ext.define('Commons.Window.BrowserWindow', {
                             me.down("treepanel").getStore().reload();
                         }
                     }
-                ]
+                ],
+                listeners: {
+                    itemdblclick: function (tree, record) {
+
+                    }
+                }
 
 
             }
@@ -520,6 +536,20 @@ Ext.define('Commons.Window.BrowserWindow', {
 
 
         this.callParent(arguments);
+    },
+
+    saveHandler: function () {
+        var me = this;
+        var win = me.up("window"),
+            tree = win.down("treepanel"),
+            textfield = win.browserField;
+
+        var node = tree.getSelectionModel().getLastSelected();
+        var location = node.raw.id;
+        textfield.setValue(location);
+        win.close();
     }
 });
+
+
 
