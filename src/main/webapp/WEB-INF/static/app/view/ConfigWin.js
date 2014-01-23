@@ -25,7 +25,7 @@ Ext.define('Share.view.ConfigWin', {
                                 fieldLabel: 'Location',
                                 name: 'location',
                                 browserWindow: {
-                                    url: '/config/directoryList'
+                                    url: '/system/dir'
                                 }
 
                             },

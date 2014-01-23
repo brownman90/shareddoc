@@ -3,6 +3,6 @@ Ext.define('Share.model.Dir', {
 
     fields: [
         {name: 'id', type: 'int'},
-        {name: 'name', type: 'string'},
+        {name: 'text', type: 'string'},
     ]
 });

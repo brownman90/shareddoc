@@ -8,15 +8,17 @@ import java.util.List;
  */
 public class Dir {
     private String id;
-    private String name;
+    private String text;
     private List<Dir> children;
+    private boolean expanded;
+    private boolean leaf;
 
     public Dir() {
     }
 
-    public Dir(String id, String name) {
+    public Dir(String id, String text) {
         this.id = id;
-        this.name = name;
+        this.text = text;
     }
 
     public String getId() {
@@ -27,12 +29,12 @@ public class Dir {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getText() {
+        return text;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public List<Dir> getChildren() {
@@ -41,5 +43,21 @@ public class Dir {
 
     public void setChildren(List<Dir> children) {
         this.children = children;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    public boolean isLeaf() {
+        return leaf;
+    }
+
+    public void setLeaf(boolean leaf) {
+        this.leaf = leaf;
     }
 }

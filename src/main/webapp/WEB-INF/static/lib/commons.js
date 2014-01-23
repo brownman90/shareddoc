@@ -484,32 +484,45 @@ Ext.define('Commons.Window.BrowserWindow', {
     initComponent: function () {
         var me = this;
 
-        this.store = Ext.create('Ext.data.TreeStore', {
-            fields: this.fields || ['id', 'name'],
+        var store = Ext.create('Ext.data.TreeStore', {
+            fields: ['id', 'text'],
             proxy: {
                 type: 'ajax',
                 url: this.url
             }
         });
-
         this.items = [
             {
                 xtype: 'treepanel',
                 region: 'center',
                 rootVisible: false,
-                displayField: this.displayField || 'name',
                 border: false,
-                store: this.store,
+                store: store,
                 layout: 'fit',
                 tbar: [
                     {
                         iconCls: 'home',
-                        tooltip: 'Home Directory'
+                        tooltip: 'Home Directory',
+                        handler: function () {
+                            Ext.Ajax.request({
+                                url: me.url + "/home",
+                                success: function (res) {
+                                    var tree = me.down("treepanel");
+                                    var result = Ext.JSON.decode(res.responseText);
+                                    var home = result.data;
+                                    console.log("/root/" + home);
+                                    console.log();
+                                    tree.selectPath("/root/C:\\/C:\\Users/C:\\Users\\chenzhouce");
+                                }
+                            });
+                        }
                     },
                     '-',
                     {
                         iconCls: 'add',
-                        tooltip: 'Create Directory'
+                        tooltip: 'Create Directory',
+                        handler: function () {
+                        }
                     },
                     {
                         iconCls: 'delete',
