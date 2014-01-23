@@ -2,7 +2,7 @@ package com.zchen.controller;
 
 import com.zchen.bean.Dir;
 import com.zchen.utils.ResponseMap;
-import org.apache.commons.lang.StringUtils;
+import com.zchen.utils.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,7 +32,7 @@ public class SystemController {
             FileFilter ff = new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
-                    return pathname.isDirectory();
+                    return !pathname.isHidden() && pathname.isDirectory();
                 }
             };
             files = new File(node).listFiles(ff);
@@ -40,7 +40,12 @@ public class SystemController {
         List<Dir> children = new ArrayList<>();
         for (File file : files) {
             String dirName = file.getName().equals("") ? file.getAbsolutePath() : file.getName();
-            Dir dir = new Dir(file.getAbsolutePath(), dirName);
+            String path = Utils.slashExchange(file.getAbsolutePath());
+            Dir dir = new Dir(path, dirName);
+            File flagFile = new File(path + "/.shareddoc");
+            if (flagFile.exists()) {
+                dir.setIconCls("favicon");
+            }
             children.add(dir);
         }
         root.setChildren(children);
@@ -54,11 +59,7 @@ public class SystemController {
     @ResponseBody
     ResponseMap home() {
         String home = System.getProperty("user.home");
-        String[] ss = home.split("\\\\");
-        for (int i = 1; i < ss.length; i++) {
-            ss[i] = ss[i - 1] + "\\" + ss[i];
-        }
-        return ResponseMap.get().success().setData(StringUtils.join(ss, "/"));
+        return ResponseMap.get().success().setData(Utils.slashExchange(home));
     }
 
 }

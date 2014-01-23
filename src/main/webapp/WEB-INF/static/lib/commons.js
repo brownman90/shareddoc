@@ -490,6 +490,7 @@ Ext.define('Commons.Window.BrowserWindow', {
                 type: 'ajax',
                 url: this.url
             }
+
         });
         this.items = [
             {
@@ -510,11 +511,17 @@ Ext.define('Commons.Window.BrowserWindow', {
                                     var tree = me.down("treepanel");
                                     var result = Ext.JSON.decode(res.responseText);
                                     var home = result.data;
-                                    console.log("/root/" + home);
-                                    console.log();
-                                    tree.selectPath("/root/C:\\/C:\\Users/C:\\Users\\chenzhouce");
+                                    tree.selectPath(me.pathFormat(home), 'id', '$');
                                 }
                             });
+                        }
+                    },
+                    {
+                        iconCls: 'location',
+                        tooltip: 'Current Directory',
+                        handler: function () {
+                            var tree = this.up("window").down("treepanel");
+                            tree.selectPath(me.pathFormat(this.up("window").browserField.getValue()), 'id', '$');
                         }
                     },
                     '-',
@@ -522,6 +529,8 @@ Ext.define('Commons.Window.BrowserWindow', {
                         iconCls: 'add',
                         tooltip: 'Create Directory',
                         handler: function () {
+                            var tree = this.up("window").down("treepanel");
+                            tree.selectPath(me.pathFormat(this.up("window").browserField.getValue()), 'id', '$');
                         }
                     },
                     {
@@ -543,7 +552,6 @@ Ext.define('Commons.Window.BrowserWindow', {
                     }
                 }
 
-
             }
         ];
 
@@ -561,6 +569,18 @@ Ext.define('Commons.Window.BrowserWindow', {
         var location = node.raw.id;
         textfield.setValue(location);
         win.close();
+    },
+
+    pathFormat: function (value) {
+        value = value.replace(/\//g, "$");
+        value = value.replace(/:/g, ":/");
+        var dirs = value.split("$");
+        for (var i = 1; i < dirs.length; i++) {
+            dirs[i] = dirs[i - 1] + "/" + dirs[i];
+        }
+        value = dirs.join("$");
+        value = value.replace(/\/\//g, "\/");
+        return "$root$" + value;
     }
 });
 

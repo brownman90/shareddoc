@@ -12,6 +12,7 @@ public class Dir {
     private List<Dir> children;
     private boolean expanded;
     private boolean leaf;
+    private String iconCls;
 
     public Dir() {
     }
@@ -59,5 +60,13 @@ public class Dir {
 
     public void setLeaf(boolean leaf) {
         this.leaf = leaf;
+    }
+
+    public String getIconCls() {
+        return iconCls;
+    }
+
+    public void setIconCls(String iconCls) {
+        this.iconCls = iconCls;
     }
 }
