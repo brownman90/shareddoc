@@ -62,4 +62,12 @@ public class SystemController {
         return ResponseMap.get().success().setData(Utils.slashExchange(home));
     }
 
+    @RequestMapping("/dir/current")
+    public
+    @ResponseBody
+    ResponseMap current() {
+        String home = "D:/shared_doc";
+        return ResponseMap.get().success().setData(Utils.slashExchange(home));
+    }
+
 }

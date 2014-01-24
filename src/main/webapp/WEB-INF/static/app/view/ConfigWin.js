@@ -1,5 +1,5 @@
 Ext.define('Share.view.ConfigWin', {
-    extend: 'Commons.Window',
+    extend: 'Commons.window.Window',
     alias: 'widget.configwin',
 
     title: 'Settings',
@@ -16,7 +16,6 @@ Ext.define('Share.view.ConfigWin', {
                         xtype: 'fieldset',
                         title: 'Storage',
                         defaults: {
-                            msgTarget: 'side',
                             anchor: '100%'
                         },
                         items: [
@@ -24,10 +23,13 @@ Ext.define('Share.view.ConfigWin', {
                                 xtype: 'browserfield',
                                 fieldLabel: 'Location',
                                 name: 'location',
+                                itemId: 'location',
+                                combineErrors: true,
+                                allowBlank: false,
                                 browserWindow: {
+                                    id: 'configBrowser',
                                     url: '/system/dir'
                                 }
-
                             },
                             {
                                 xtype: 'textslider',

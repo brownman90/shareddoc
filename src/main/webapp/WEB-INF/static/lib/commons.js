@@ -1,4 +1,4 @@
-Ext.define('Commons.Window', {
+Ext.define('Commons.window.Window', {
     extend: 'Ext.window.Window',
     alias: 'widget.commonswindow',
 
@@ -9,12 +9,12 @@ Ext.define('Commons.Window', {
     constrainHeader: true,
 
     initComponent: function () {
-
+        var me = this;
         this.buttons = [
             {
                 text: 'Save',
                 action: 'save',
-                handler: this.saveHandler
+                handler: Ext.Function.bind(me.saveHandler, me)
             },
             {
                 text: 'Cancel',
@@ -27,7 +27,7 @@ Ext.define('Commons.Window', {
     }
 });
 
-Ext.define('Commons.SimpleWindow', {
+Ext.define('Commons.window.SimpleWindow', {
     extend: 'Ext.window.Window',
     alias: 'widget.simplewindow',
 
@@ -348,25 +348,26 @@ Ext.define('Commons.Form.TextSliderField', {
     },
     initComponent: function () {
         var me = this;
-        this.textType = "textfield";
+        me.textType = "textfield";
         if (me.isNumber)
-            this.textType = 'numberfield';
+            me.textType = 'numberfield';
         this.items = [
             {
-                xtype: this.textType,
-                value: this.value,
-                allowBlank: this.allowBlank,
-                vtype: this.vtype,
-                step: this.numberStep,
-                min: this.min || 0,
-                max: this.max || 0,
+                xtype: me.textType,
+                value: me.value,
+                allowBlank: me.allowBlank,
+                vtype: me.vtype,
+                step: me.numberStep,
+                min: me.min || 0,
+                max: me.max || 0,
                 flex: 2,
                 listeners: {
-                    blur: function (field) {
-                        if (!field.isValid())
+                    blur: function (textfield) {
+                        if (!textfield.isValid())
                             return;
-                        var value = field.getValue();
                         var slider = me.down("slider");
+
+                        var value = textfield.getValue();
                         if (me.sliderFormatter)
                             value = me.sliderFormatter(value);
                         slider.setValue(value);
@@ -375,18 +376,18 @@ Ext.define('Commons.Form.TextSliderField', {
             },
             {
                 xtype: 'slider',
-                name: this.name,
-                value: this.value,
+                name: me.name,
+                value: me.value,
                 padding: '0 0 0 5',
-                increment: this.sliderStep,
-                minValue: this.minValue || 0,
-                maxValue: this.maxValue || 100,
-                useTips: this.useTips,
-                tipText: this.tipText,
+                increment: me.sliderStep,
+                minValue: me.minValue || 0,
+                maxValue: me.maxValue || 100,
+                useTips: me.useTips,
+                tipText: me.tipText,
                 flex: 3,
                 margins: '4 0 0 0',
                 listeners: {
-                    changecomplete: function (slider, value, thumb) {
+                    changecomplete: function (slider, value) {
                         var textfield = me.down("textfield");
                         if (me.displayFormatter)
                             value = me.displayFormatter(value);
@@ -399,15 +400,26 @@ Ext.define('Commons.Form.TextSliderField', {
     },
 
     setValue: function (value) {
-        if (this.displayFormatter)
-            this.down("textfield").setValue(this.displayFormatter(value));
+        var me = this;
+        if (me.displayFormatter)
+            me.down("textfield").setValue(me.displayFormatter(value));
         else
-            this.down("textfield").setValue(value);
-        this.down("slider").setValue(value);
+            me.down("textfield").setValue(value);
+        me.down("slider").setValue(value);
     },
 
-    setMaxValue: function (value) {
-        this.down("slider").setMaxValue(value);
+    setMaxValue: function (max, animate) {
+        var me = this;
+        var slider = me.down("slider"),
+            textfield = me.down("textfield");//TODO for number
+        if (animate) {
+            var ori = slider.getValue();
+            slider.setValue(me.minValue);
+            slider.setMaxValue(max);
+            slider.setValue(ori);
+        } else {
+            this.down("slider").setMaxValue(max);
+        }
     },
 
     getValue: function () {
@@ -416,7 +428,9 @@ Ext.define('Commons.Form.TextSliderField', {
 
     getFormatterValue: function () {
         return this.down("textfield").getValue();
-    }
+    },
+
+
 });
 
 
@@ -444,14 +458,20 @@ Ext.define('Commons.Form.BrowserField', {
     },
     initComponent: function () {
         var me = this;
-        me.browserWindow = Ext.apply({browserField: this}, me.browserWindow);
-        this.items = [
+        me.browserWindow = Ext.apply({browserField: me}, me.browserWindow);
+        me.items = [
             {
                 xtype: 'textfield',
                 anchor: '100%',
                 flex: 1,
                 name: me.name,
-                readOnly: me.readOnly
+                readOnly: me.readOnly,
+                allowBlank: me.allowBlank,
+                listeners: {
+                    blur: function () {
+                        me.fireEvent('blur', me);
+                    }
+                }
             },
             {
                 xtype: 'button',
@@ -459,11 +479,14 @@ Ext.define('Commons.Form.BrowserField', {
                 iconCls: me.iconCls,
                 margin: '0 0 0 5',
                 handler: function () {
-                    Ext.create("Commons.Window.BrowserWindow", me.browserWindow).show();
+                    Ext.widget("browserwindow", me.browserWindow).show();
                 }
             }
-        ]
-        this.callParent(arguments);
+        ];
+
+        me.addEvents('blur');
+
+        me.callParent(arguments);
     },
 
     setValue: function (value) {
@@ -475,12 +498,12 @@ Ext.define('Commons.Form.BrowserField', {
     }
 });
 
-Ext.define('Commons.Window.BrowserWindow', {
-    extend: 'Commons.Window',
+Ext.define('Commons.window.BrowserWindow', {
+    extend: 'Commons.window.Window',
     alias: 'widget.browserwindow',
-    title: this.title || 'Browser',
-    width: this.width || 350,
-    height: this.height || 380,
+    title: 'Browser',
+    width: 350,
+    height: 380,
     initComponent: function () {
         var me = this;
 
@@ -508,10 +531,9 @@ Ext.define('Commons.Window.BrowserWindow', {
                             Ext.Ajax.request({
                                 url: me.url + "/home",
                                 success: function (res) {
-                                    var tree = me.down("treepanel");
                                     var result = Ext.JSON.decode(res.responseText);
                                     var home = result.data;
-                                    tree.selectPath(me.pathFormat(home), 'id', '$');
+                                    me.down("treepanel").selectPath(me.pathFormat(home), 'id', '$');
                                 }
                             });
                         }
@@ -520,8 +542,14 @@ Ext.define('Commons.Window.BrowserWindow', {
                         iconCls: 'location',
                         tooltip: 'Current Directory',
                         handler: function () {
-                            var tree = this.up("window").down("treepanel");
-                            tree.selectPath(me.pathFormat(this.up("window").browserField.getValue()), 'id', '$');
+                            Ext.Ajax.request({
+                                url: me.url + "/current",
+                                success: function (res) {
+                                    var result = Ext.JSON.decode(res.responseText);
+                                    var current = result.data;
+                                    me.down("treepanel").selectPath(me.pathFormat(current), 'id', '$');
+                                }
+                            });
                         }
                     },
                     '-',
@@ -529,13 +557,15 @@ Ext.define('Commons.Window.BrowserWindow', {
                         iconCls: 'add',
                         tooltip: 'Create Directory',
                         handler: function () {
-                            var tree = this.up("window").down("treepanel");
-                            tree.selectPath(me.pathFormat(this.up("window").browserField.getValue()), 'id', '$');
+
                         }
                     },
                     {
                         iconCls: 'delete',
-                        tooltip: 'Delete Directory'
+                        tooltip: 'Delete Directory',
+                        handler: function () {
+
+                        }
                     },
                     '-',
                     {
@@ -555,20 +585,24 @@ Ext.define('Commons.Window.BrowserWindow', {
             }
         ];
 
+        me.addEvents('afterSave');
 
         this.callParent(arguments);
     },
 
     saveHandler: function () {
-        var me = this;
-        var win = me.up("window"),
-            tree = win.down("treepanel"),
-            textfield = win.browserField;
+        var me = this,
+            tree = me.down("treepanel"),
+            browserfield = me.browserField;
 
         var node = tree.getSelectionModel().getLastSelected();
         var location = node.raw.id;
-        textfield.setValue(location);
-        win.close();
+        browserfield.setValue(location);
+
+        if (me.hasListeners.afterSave) {
+            me.fireEvent('afterSave', browserfield);
+        }
+        me.close();
     },
 
     pathFormat: function (value) {

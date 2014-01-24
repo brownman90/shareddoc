@@ -42,9 +42,13 @@ Ext.define('Share.controller.Docs', {
             'docgrid tool[action=settings]': {
                 click: this.openConfigWin
             },
-            'configwin textfield[name=location]': {
+            'configwin browserfield[itemId=location]': {
                 blur: this.checkLocationSize
+            },
+            'browserwindow[id=configBrowser]': {
+                afterSave: this.checkLocationSize
             }
+
         });
     },
 
@@ -138,7 +142,7 @@ Ext.define('Share.controller.Docs', {
     },
 
     openConfigWin: function () {
-        Ext.create("Share.view.ConfigWin").show();
+        Ext.widget("configwin").show();
 
         var form = this.getConfigWin().down("form");
         form.load({
@@ -165,8 +169,9 @@ Ext.define('Share.controller.Docs', {
     },
 
     checkLocationSize: function (field) {
-        var limitSlider = field.up("form").down("slider[itemId=limit]");
+        var limitSlider = field.up("form").down("textslider[itemId=limit]");
         var path = field.getValue();
+        if (path === "")  return;
         Ext.Ajax.request({
             url: '/config/space',
             params: {
@@ -176,10 +181,7 @@ Ext.define('Share.controller.Docs', {
                 var result = Ext.JSON.decode(res.responseText);
                 if (result.status) {
                     var freeSize = result.data;
-                    var limitSlider = field.up("form").down("slider[itemId=limit]");
-                    limitSlider.setMaxValue(freeSize);
-
-
+                    limitSlider.setMaxValue(freeSize, true);
                 } else
                     Ext.CommonsMsg.error('Error', result.message);
             }
