@@ -13,7 +13,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
+            <groupId>com.zchen</groupId>
+            <artifactId>extjs-assistance</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
         </dependency>
