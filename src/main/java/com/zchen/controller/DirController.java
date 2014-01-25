@@ -30,6 +30,7 @@ public class DirController {
     public
     @ResponseBody
     ExtjsDirectoryNode dirTree(String node) {
+        String rootPath = "D:/shared_doc";
         ExtjsFileFilter fileFilter = new ExtjsFileFilter();
         fileFilter.setIgnoreFile(true);
         fileFilter.setIgnoreHidden(true);
@@ -37,10 +38,10 @@ public class DirController {
 
         ExtjsDirectoryConfig config = new ExtjsDirectoryConfig();
         config.setFileFilter(fileFilter);
-        config.setRootPath("D:/shared_doc");
+        config.setRootPath(rootPath);
         config.setLevel(0);
 
-        ExtjsDirectoryNode top = ExtjsDirectoryNodeFactory.build().newNodeInstance(node, config);
+        ExtjsDirectoryNode top = ExtjsDirectoryNodeFactory.build().newTopNode(node, rootPath);
         return ExtjsDirectoryAssistant.getFileSystemTree(top, config);
     }
 

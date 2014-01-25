@@ -22,7 +22,7 @@ public class SystemController {
     public
     @ResponseBody
     ExtjsDirectoryNode list(String node) {
-        ExtjsDirectoryNode directoryNode = ExtjsDirectoryNodeFactory.build().newNodeInstance(node);
+        ExtjsDirectoryNode directoryNode = ExtjsDirectoryNodeFactory.build().newTopNode(node);
 
         ExtjsFileFilter fileFilter = new ExtjsFileFilter();
         fileFilter.setIgnoreFile(true);
