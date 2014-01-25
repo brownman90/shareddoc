@@ -38,6 +38,7 @@ public class DirController {
         ExtjsDirectoryConfig config = new ExtjsDirectoryConfig();
         config.setFileFilter(fileFilter);
         config.setRootPath("D:/shared_doc");
+        config.setLevel(0);
 
         ExtjsDirectoryNode top = ExtjsDirectoryNodeFactory.build().newNodeInstance(node, config);
         return ExtjsDirectoryAssistant.getFileSystemTree(top, config);
