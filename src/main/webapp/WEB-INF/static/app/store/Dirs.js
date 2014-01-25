@@ -12,7 +12,6 @@ Ext.define('Share.store.Dirs', {
     },
     root: {
         id: '/',
-        name: 'Root',
         expanded: true
     }
 

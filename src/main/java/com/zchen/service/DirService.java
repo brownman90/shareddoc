@@ -9,8 +9,6 @@ import org.apache.commons.io.FileExistsException;
  */
 public interface DirService {
 
-    public Dir getDirTree();
-
     public void create(Dir dir) throws FileExistsException;
 
     public void delete(Dir dir) throws FileExistsException;

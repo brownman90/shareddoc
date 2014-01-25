@@ -1,14 +1,14 @@
 package com.zchen.controller;
 
-import com.zchen.extjsassistance.fs.ExtjsDirectoryAssistant;
-import com.zchen.extjsassistance.fs.ExtjsDirectoryNodeFactory;
-import com.zchen.extjsassistance.fs.ExtjsFileFilter;
+import com.zchen.extjsassistance.fs.*;
 import com.zchen.extjsassistance.fs.model.ExtjsDirectoryNode;
 import com.zchen.utils.ResponseMap;
 import com.zchen.utils.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.File;
 
 /**
  * @author Zhouce Chen
@@ -23,11 +23,25 @@ public class SystemController {
     @ResponseBody
     ExtjsDirectoryNode list(String node) {
         ExtjsDirectoryNode directoryNode = ExtjsDirectoryNodeFactory.build().newNodeInstance(node);
+
         ExtjsFileFilter fileFilter = new ExtjsFileFilter();
         fileFilter.setIgnoreFile(true);
         fileFilter.setIgnoreHidden(true);
 
-        return ExtjsDirectoryAssistant.getFileSystemTree(directoryNode, fileFilter);
+        ExtjsDirectoryConfig config = new ExtjsDirectoryConfig();
+        config.setFileFilter(fileFilter);
+        config.setIconHandler(new ExtjsIconHandler() {
+            @Override
+            public String getIconClass(ExtjsDirectoryNode directoryNode) {
+                File file = new File(directoryNode.getId() + "/.shareddoc");
+                if (file.exists()) {
+                    return "favicon";
+                }
+                return "";
+            }
+        });
+
+        return ExtjsDirectoryAssistant.getFileSystemTree(directoryNode, config);
     }
 
 

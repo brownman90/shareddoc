@@ -1,6 +1,11 @@
 package com.zchen.controller;
 
 import com.zchen.bean.Dir;
+import com.zchen.extjsassistance.fs.ExtjsDirectoryAssistant;
+import com.zchen.extjsassistance.fs.ExtjsDirectoryConfig;
+import com.zchen.extjsassistance.fs.ExtjsDirectoryNodeFactory;
+import com.zchen.extjsassistance.fs.ExtjsFileFilter;
+import com.zchen.extjsassistance.fs.model.ExtjsDirectoryNode;
 import com.zchen.service.DirService;
 import com.zchen.utils.ResponseMap;
 import org.apache.commons.io.FileExistsException;
@@ -22,9 +27,20 @@ public class DirController {
     private DirService dirService;
 
     @RequestMapping("/tree")
-    public @ResponseBody
-    Dir dirTree(){
-        return dirService.getDirTree();
+    public
+    @ResponseBody
+    ExtjsDirectoryNode dirTree(String node) {
+        ExtjsFileFilter fileFilter = new ExtjsFileFilter();
+        fileFilter.setIgnoreFile(true);
+        fileFilter.setIgnoreHidden(true);
+
+
+        ExtjsDirectoryConfig config = new ExtjsDirectoryConfig();
+        config.setFileFilter(fileFilter);
+        config.setRootPath("D:/shared_doc");
+
+        ExtjsDirectoryNode top = ExtjsDirectoryNodeFactory.build().newNodeInstance(node, config);
+        return ExtjsDirectoryAssistant.getFileSystemTree(top, config);
     }
 
 
