@@ -1,7 +1,7 @@
 package com.zchen.sdp.controller;
 
+import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.Dir;
-import com.zchen.extjsassistance.fs.model.ExtjsDirectoryNode;
 import com.zchen.sdp.service.DirService;
 import com.zchen.sdp.utils.ResponseMap;
 import org.apache.commons.io.FileExistsException;
@@ -25,7 +25,7 @@ public class DirController {
     @RequestMapping("/tree")
     public
     @ResponseBody
-    ExtjsDirectoryNode getDirectoryTree(String node) {
+    DirectoryNode getDirectoryTree(String node) {
         return dirService.getDirectoryTree(node);
     }
 

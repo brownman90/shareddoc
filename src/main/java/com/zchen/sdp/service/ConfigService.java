@@ -1,5 +1,6 @@
 package com.zchen.sdp.service;
 
+import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
 
 import java.io.FileNotFoundException;
@@ -14,7 +15,7 @@ public interface ConfigService {
 
     public Long getFreeSpace(String path) throws FileNotFoundException;
 
-    public ExtjsDirectoryNode getFileSystemTree(String node);
+    public DirectoryNode getFileSystemTree(String node);
 
     public String getFileSystemHome();
 

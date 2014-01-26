@@ -1,12 +1,14 @@
 package com.zchen.sdp.service.impl;
 
+import com.zchen.extjsassistance.fs.DirectoryConfig;
+import com.zchen.extjsassistance.fs.ExtjsDirectoryAssistant;
+import com.zchen.extjsassistance.fs.ExtjsDirectoryNodeFactory;
+import com.zchen.extjsassistance.fs.ExtjsFileFilter;
+import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.Dir;
-import com.zchen.extjsassistance.fs.*;
-import com.zchen.extjsassistance.fs.model.ExtjsDirectoryNode;
 import com.zchen.sdp.service.DirService;
 import org.apache.commons.io.FileExistsException;
 import org.springframework.stereotype.Service;
-
 
 import java.io.File;
 
@@ -25,19 +27,19 @@ public class DirServiceImpl implements DirService {
      * @return  The top directory node
      */
     @Override
-    public ExtjsDirectoryNode getDirectoryTree(String node) {
+    public DirectoryNode getDirectoryTree(String node) {
         String rootPath = "D:/shared_doc";
         ExtjsFileFilter fileFilter = new ExtjsFileFilter();
         fileFilter.setIgnoreFile(true);
         fileFilter.setIgnoreHidden(true);
 
 
-        ExtjsDirectoryConfig config = new ExtjsDirectoryConfig();
+        DirectoryConfig config = new DirectoryConfig();
         config.setFileFilter(fileFilter);
         config.setRootPath(rootPath);
         config.setLevel(0);
 
-        ExtjsDirectoryNode top = ExtjsDirectoryNodeFactory.build().newTopNode(node, rootPath);
+        DirectoryNode top = ExtjsDirectoryNodeFactory.build().newTopNode(node, rootPath);
         return ExtjsDirectoryAssistant.getFileSystemTree(top, config);
     }
 

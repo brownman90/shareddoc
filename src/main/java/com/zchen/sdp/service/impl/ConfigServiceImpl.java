@@ -1,12 +1,11 @@
 package com.zchen.sdp.service.impl;
 
-import com.zchen.sdp.bean.SDPConfig;
 import com.zchen.extjsassistance.fs.*;
-import com.zchen.extjsassistance.fs.model.ExtjsDirectoryNode;
+import com.zchen.extjsassistance.fs.model.DirectoryNode;
+import com.zchen.sdp.bean.SDPConfig;
 import com.zchen.sdp.service.ConfigService;
 import com.zchen.sdp.utils.Utils;
 import org.springframework.stereotype.Service;
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,18 +59,18 @@ public class ConfigServiceImpl implements ConfigService {
      * @return  The top directory
      */
     @Override
-    public ExtjsDirectoryNode getFileSystemTree(String node) {
-        ExtjsDirectoryNode directoryNode = ExtjsDirectoryNodeFactory.build().newTopNode(node);
+    public DirectoryNode getFileSystemTree(String node) {
+        DirectoryNode directoryNode = DirectoryNodeFactory.build().newTopNode(node);
 
         ExtjsFileFilter fileFilter = new ExtjsFileFilter();
         fileFilter.setIgnoreFile(true);
         fileFilter.setIgnoreHidden(true);
 
-        ExtjsDirectoryConfig config = new ExtjsDirectoryConfig();
+        DirectoryConfig config = new DirectoryConfig();
         config.setFileFilter(fileFilter);
-        config.setIconHandler(new ExtjsIconHandler() {
+        config.setIconHandler(new IconHandler() {
             @Override
-            public String getIconClass(ExtjsDirectoryNode directoryNode) {
+            public String getIconClass(DirectoryNode directoryNode) {
                 File file = new File(directoryNode.getId() + "/.shareddoc");
                 if (file.exists()) {
                     return "favicon";

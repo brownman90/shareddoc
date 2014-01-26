@@ -1,5 +1,6 @@
 package com.zchen.sdp.service;
 
+import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.Dir;
 import org.apache.commons.io.FileExistsException;
 
@@ -9,7 +10,7 @@ import org.apache.commons.io.FileExistsException;
  */
 public interface DirService {
 
-    public ExtjsDirectoryNode getDirectoryTree(String node);
+    public DirectoryNode getDirectoryTree(String node);
 
     public void create(Dir dir) throws FileExistsException;
 

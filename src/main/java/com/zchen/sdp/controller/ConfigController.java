@@ -1,13 +1,12 @@
 package com.zchen.sdp.controller;
 
+import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
-import com.zchen.extjsassistance.fs.model.ExtjsDirectoryNode;
-import com.zchen.sdp.utils.ResponseMap;
 import com.zchen.sdp.service.ConfigService;
+import com.zchen.sdp.utils.ResponseMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 
 import javax.annotation.Resource;
 import java.io.FileNotFoundException;
@@ -48,7 +47,7 @@ public class ConfigController {
     @RequestMapping("/fs")
     public
     @ResponseBody
-    ExtjsDirectoryNode getFileSystemTree(String node) {
+    DirectoryNode getFileSystemTree(String node) {
         return configService.getFileSystemTree(node);
     }
 
