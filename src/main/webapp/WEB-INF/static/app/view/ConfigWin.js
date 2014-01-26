@@ -28,7 +28,7 @@ Ext.define('Share.view.ConfigWin', {
                                 allowBlank: false,
                                 browserWindow: {
                                     id: 'configBrowser',
-                                    url: '/system/dir'
+                                    url: '/config/fs'
                                 }
                             },
                             {
