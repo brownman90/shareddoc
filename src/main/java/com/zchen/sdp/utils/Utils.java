@@ -8,7 +8,7 @@ import java.util.HashMap;
  */
 public class Utils {
     public static HashMap<String, Object> emptyMap(){
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public static String slashExchange(String value){

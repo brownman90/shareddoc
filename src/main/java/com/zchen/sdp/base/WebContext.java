@@ -5,14 +5,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class WebContext {
-    private static final ThreadLocal<HttpServletRequest> request = new ThreadLocal<HttpServletRequest>();
-    private static final ThreadLocal<HttpServletResponse> response = new ThreadLocal<HttpServletResponse>();
+    private static final ThreadLocal<HttpServletRequest> request = new ThreadLocal<>();
+    private static final ThreadLocal<HttpServletResponse> response = new ThreadLocal<>();
 
     public static void setRequest(HttpServletRequest req) {
         request.set(req);
     }
 
-    public static final HttpServletRequest getRequest() {
+    public static HttpServletRequest getRequest() {
         return request.get();
     }
 
@@ -24,7 +24,7 @@ public class WebContext {
         response.set(rep);
     }
 
-    public static final HttpServletResponse getResponse() {
+    public static HttpServletResponse getResponse() {
         return response.get();
     }
 
@@ -32,7 +32,7 @@ public class WebContext {
         response.remove();
     }
 
-    public static final HttpSession getSession() {
+    public static  HttpSession getSession() {
         return request.get().getSession();
     }
 

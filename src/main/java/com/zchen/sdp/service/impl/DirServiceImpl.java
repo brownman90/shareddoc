@@ -2,7 +2,7 @@ package com.zchen.sdp.service.impl;
 
 import com.zchen.extjsassistance.fs.DirectoryConfig;
 import com.zchen.extjsassistance.fs.ExtjsDirectoryAssistant;
-import com.zchen.extjsassistance.fs.ExtjsDirectoryNodeFactory;
+import com.zchen.extjsassistance.fs.DirectoryNodeFactory;
 import com.zchen.extjsassistance.fs.ExtjsFileFilter;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.Dir;
@@ -39,7 +39,7 @@ public class DirServiceImpl implements DirService {
         config.setRootPath(rootPath);
         config.setLevel(0);
 
-        DirectoryNode top = ExtjsDirectoryNodeFactory.build().newTopNode(node, rootPath);
+        DirectoryNode top = DirectoryNodeFactory.build().newTopNode(node, rootPath);
         return ExtjsDirectoryAssistant.getFileSystemTree(top, config);
     }
 
