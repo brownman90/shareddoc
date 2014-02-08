@@ -1,8 +1,8 @@
 package com.zchen.sdp.dao.impl;
 
+import com.zchen.extjsassistance.base.model.GridLoad;
 import com.zchen.sdp.bean.SDPDoc;
 import com.zchen.sdp.dao.DocDao;
-import com.zchen.sdp.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -43,25 +43,29 @@ public class DocDaoImpl implements DocDao {
 
     }
 
-    @Override
-    public int count() {
-        String sql = "select count(*) from doc";
-        return jdbcTemplate.queryForInt(sql, Utils.emptyMap());
+    public int count(StringBuilder where, SDPDoc SDPDoc) {
+        StringBuilder sb = new StringBuilder(" select count(*) from doc where 1=1  ");
+        sb.append(where);
+        return jdbcTemplate.queryForInt(sb.toString(), new BeanPropertySqlParameterSource(SDPDoc));
     }
 
     @Override
-    public List<SDPDoc> query(SDPDoc SDPDoc, int start, int limit) {
+    public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit) {
         StringBuilder sb = new StringBuilder("select * from doc  where 1=1 ");
+        StringBuilder where = new StringBuilder();
         if (StringUtils.isNotEmpty(SDPDoc.getName())) {
             SDPDoc.setName("%" + SDPDoc.getName() + "%");
-            sb.append("and name like :name");
+            where.append(" and name like :name ");
         }
         if (StringUtils.isNotEmpty(SDPDoc.getPath())) {
             SDPDoc.setPath(SDPDoc.getPath() + "%");
-            sb.append(" and  path like :path");
+            where.append(" and  path like :path ");
         }
+        sb.append(where);
         sb.append(String.format(" limit %d,%d ", start, limit));
-        return jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(SDPDoc), new DocMapper());
+        List<SDPDoc> list = jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(SDPDoc), new DocMapper());
+        int total = count(where, SDPDoc);
+        return new GridLoad<>(list, total);
     }
 
     @Override

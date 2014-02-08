@@ -1,8 +1,7 @@
 package com.zchen.sdp.dao;
 
+import com.zchen.extjsassistance.base.model.GridLoad;
 import com.zchen.sdp.bean.SDPDoc;
-
-import java.util.List;
 
 /**
  * @author Zhouce Chen
@@ -15,9 +14,7 @@ public interface DocDao {
 
     public void update(SDPDoc SDPDoc);
 
-    public int count();
-
-    public List<SDPDoc> query(SDPDoc SDPDoc, int start, int limit);
+    public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit);
 
     public SDPDoc findById(SDPDoc SDPDoc);
 }

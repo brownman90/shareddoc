@@ -37,7 +37,7 @@ public class DocServiceImpl implements DocService {
      */
     @Override
     public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit) {
-        return new GridLoad<>(docDao.query(SDPDoc, start, limit), docDao.count());
+        return docDao.query(SDPDoc, start, limit);
     }
 
     /**
