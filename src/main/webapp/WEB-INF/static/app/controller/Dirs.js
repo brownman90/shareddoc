@@ -42,7 +42,8 @@ Ext.define('Share.controller.Dirs', {
     },
 
     nodeClick: function (tree, record) {
-        var pathField = this.getDocGrid().down("hiddenfield[name=path]");
+        var pathField = this.getDocGrid().down("hiddenfield[name=path]"),
+            nameField = this.getDocGrid().down("textfield[name=name]");
         var path = record.raw.id;
 
         var docStore = this.getDocsStore();
@@ -51,11 +52,14 @@ Ext.define('Share.controller.Dirs', {
         }
         pathField.setValue(path);
 
-        docStore.proxy.setExtraParam("name", "");
-        docStore.proxy.setExtraParam("path", path);
-        docStore.load();
-
-
+        var read = new Ext.data.Operation({
+            action: 'read',
+            params: {
+                path: path
+            }
+        });
+        docStore.load(read);
+        nameField.reset();
     },
 
     refreshTree: function () {

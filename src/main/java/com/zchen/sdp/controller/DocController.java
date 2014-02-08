@@ -2,6 +2,7 @@ package com.zchen.sdp.controller;
 
 import com.zchen.extjsassistance.base.model.FormSubmit;
 import com.zchen.extjsassistance.base.model.GridLoad;
+import com.zchen.extjsassistance.base.model.GridParams;
 import com.zchen.sdp.bean.SDPDoc;
 import com.zchen.sdp.service.DocService;
 import com.zchen.sdp.utils.ResponseMap;
@@ -33,8 +34,8 @@ public class DocController {
     @RequestMapping("/list")
     public
     @ResponseBody
-    GridLoad<SDPDoc> list(SDPDoc SDPDoc, int start, int limit) {
-        return docService.query(SDPDoc, start, limit);
+    GridLoad<SDPDoc> list(SDPDoc sdpDoc, GridParams params) {
+        return docService.query(sdpDoc, params.getStart(), params.getLimit());
     }
 
     @RequestMapping("/upload")

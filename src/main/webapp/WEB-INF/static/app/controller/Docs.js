@@ -53,10 +53,17 @@ Ext.define('Share.controller.Docs', {
     },
 
     searchDocs: function () {
-        var nameField = this.getDocGrid().down("textfield[name=name]");
+        var nameField = this.getDocGrid().down("textfield[name=name]"),
+            pathField = this.getDocGrid().down("hiddenfield[name=path]");
         var store = this.getDocsStore();
-        store.proxy.setExtraParam("name", nameField.getValue());
-        store.load();
+        var read = new Ext.data.Operation({
+            action: 'read',
+            params: {
+                name: nameField.getValue(),
+                path: pathField.getValue()
+            }
+        });
+        store.load(read);
     },
 
     upload: function () {
@@ -66,7 +73,7 @@ Ext.define('Share.controller.Docs', {
             return;
         }
         var store = this.getDocsStore();
-        var form = this.getDocGrid().down("form").getForm();
+        var form = this.getDocGrid().down("form[itemId=uploadForm]").getForm();
         if (form.isValid()) {
             form.submit({
                 url: '/doc/upload',
