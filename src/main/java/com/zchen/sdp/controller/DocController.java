@@ -41,9 +41,9 @@ public class DocController {
     @RequestMapping("/upload")
     public
     @ResponseBody
-    FormSubmit upload(SDPDoc SDPDoc) {
+    FormSubmit upload(SDPDoc sdpDoc) {
         try {
-            docService.upload(SDPDoc);
+            docService.upload(sdpDoc);
         } catch (FileExistsException | FileUploadBase.FileSizeLimitExceededException e) {
             return FormSubmit.get().failure().setMessage("Upload failed. " + e.getMessage());
         }
@@ -51,9 +51,9 @@ public class DocController {
     }
 
     @RequestMapping("/download")
-    public String download(HttpServletResponse response, SDPDoc SDPDoc, ModelMap model)
-            throws Exception {
-        SDPDoc file = docService.findById(SDPDoc);
+    public String download(HttpServletResponse response, SDPDoc sdpDoc, ModelMap model)
+    throws Exception {
+        SDPDoc file = docService.findById(sdpDoc);
         if (file == null) {
             model.put("status", false);
             model.put("message", "\"该文件不存在，可能已被删除。\"");
@@ -64,7 +64,7 @@ public class DocController {
         } catch (FileNotFoundException e) {
             model.put("status", false);
             model.put("message", "\"该文件不存在，可能已被删除。\"");
-            // docService.delete(SDPDoc);
+            // docService.delete(sdpDoc);
             return "share/files";
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,8 +76,8 @@ public class DocController {
     @RequestMapping("delete")
     public
     @ResponseBody
-    ResponseMap delete(SDPDoc SDPDoc) {
-        docService.delete(SDPDoc);
+    ResponseMap delete(SDPDoc sdpDoc) {
+        docService.delete(sdpDoc);
         return ResponseMap.get().success();
     }
 

@@ -27,51 +27,51 @@ public class DocDaoImpl implements DocDao {
     NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
-    public void insert(SDPDoc SDPDoc) {
+    public void insert(SDPDoc sdpDoc) {
         String sql = "insert into doc(name, type, size, time, committer, path) values(:name, :type, :size, :time, :committer, :path) ";
-        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(SDPDoc));
+        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(sdpDoc));
     }
 
     @Override
-    public void delete(SDPDoc SDPDoc) {
+    public void delete(SDPDoc sdpDoc) {
         String sql = "delete from doc where id=:id";
-        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(SDPDoc));
+        jdbcTemplate.update(sql, new BeanPropertySqlParameterSource(sdpDoc));
     }
 
     @Override
-    public void update(SDPDoc SDPDoc) {
+    public void update(SDPDoc sdpDoc) {
 
     }
 
-    public int count(StringBuilder where, SDPDoc SDPDoc) {
+    public int count(StringBuilder where, SDPDoc sdpDoc) {
         StringBuilder sb = new StringBuilder(" select count(*) from doc where 1=1  ");
         sb.append(where);
-        return jdbcTemplate.queryForInt(sb.toString(), new BeanPropertySqlParameterSource(SDPDoc));
+        return jdbcTemplate.queryForInt(sb.toString(), new BeanPropertySqlParameterSource(sdpDoc));
     }
 
     @Override
-    public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit) {
+    public GridLoad<SDPDoc> query(SDPDoc sdpDoc, int start, int limit) {
         StringBuilder sb = new StringBuilder("select * from doc  where 1=1 ");
         StringBuilder where = new StringBuilder();
-        if (StringUtils.isNotEmpty(SDPDoc.getName())) {
-            SDPDoc.setName("%" + SDPDoc.getName() + "%");
+        if (StringUtils.isNotEmpty(sdpDoc.getName())) {
+            sdpDoc.setName("%" + sdpDoc.getName() + "%");
             where.append(" and name like :name ");
         }
-        if (StringUtils.isNotEmpty(SDPDoc.getPath())) {
-            SDPDoc.setPath(SDPDoc.getPath() + "%");
+        if (StringUtils.isNotEmpty(sdpDoc.getPath())) {
+            sdpDoc.setPath(sdpDoc.getPath() + "%");
             where.append(" and  path like :path ");
         }
         sb.append(where);
         sb.append(String.format(" limit %d,%d ", start, limit));
-        List<SDPDoc> list = jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(SDPDoc), new DocMapper());
-        int total = count(where, SDPDoc);
+        List<SDPDoc> list = jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(sdpDoc), new DocMapper());
+        int total = count(where, sdpDoc);
         return new GridLoad<>(list, total);
     }
 
     @Override
-    public SDPDoc findById(SDPDoc SDPDoc) {
+    public SDPDoc findById(SDPDoc sdpDoc) {
         String sql = "select * from doc where id=:id";
-        List<SDPDoc> list = jdbcTemplate.query(sql, new BeanPropertySqlParameterSource(SDPDoc), new DocMapper());
+        List<SDPDoc> list = jdbcTemplate.query(sql, new BeanPropertySqlParameterSource(sdpDoc), new DocMapper());
         if (list.size() == 0) {
             return null;
         }
@@ -81,20 +81,20 @@ public class DocDaoImpl implements DocDao {
     class DocMapper implements RowMapper<SDPDoc> {
         @Override
         public SDPDoc mapRow(ResultSet rs, int rowNum) throws SQLException {
-            SDPDoc SDPDoc = new SDPDoc();
-            SDPDoc.setId(rs.getInt("id"));
-            SDPDoc.setName(rs.getString("name"));
-            SDPDoc.setType(rs.getString("type"));
-            SDPDoc.setSize(rs.getLong("size"));
-            SDPDoc.setTime(rs.getString("time"));
-            SDPDoc.setCommitter(rs.getString("committer"));
-            SDPDoc.setPath(rs.getString("path"));
-            if (SDPDoc.getType().equals("")) {
-                SDPDoc.setFullName(SDPDoc.getName());
+            SDPDoc sdpDoc = new SDPDoc();
+            sdpDoc.setId(rs.getInt("id"));
+            sdpDoc.setName(rs.getString("name"));
+            sdpDoc.setType(rs.getString("type"));
+            sdpDoc.setSize(rs.getLong("size"));
+            sdpDoc.setTime(rs.getString("time"));
+            sdpDoc.setCommitter(rs.getString("committer"));
+            sdpDoc.setPath(rs.getString("path"));
+            if (sdpDoc.getType().equals("")) {
+                sdpDoc.setFullName(sdpDoc.getName());
             } else {
-                SDPDoc.setFullName(SDPDoc.getName() + "." + SDPDoc.getType());
+                sdpDoc.setFullName(sdpDoc.getName() + "." + sdpDoc.getType());
             }
-            return SDPDoc;
+            return sdpDoc;
         }
     }
 }

@@ -30,29 +30,29 @@ public class DocServiceImpl implements DocService {
 
     /**
      * Query document list
-     * @param SDPDoc   Query condition
+     * @param sdpDoc   Query condition
      * @param start  Start row of pager
      * @param limit  Limit rows of pager
      * @return  ResponseGrid    Document list with pager
      */
     @Override
-    public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit) {
-        return docDao.query(SDPDoc, start, limit);
+    public GridLoad<SDPDoc> query(SDPDoc sdpDoc, int start, int limit) {
+        return docDao.query(sdpDoc, start, limit);
     }
 
     /**
      * Upload document
-     * @param SDPDoc   The document to upload
+     * @param sdpDoc   The document to upload
      * @throws FileExistsException
      * @throws FileUploadBase.FileSizeLimitExceededException
      */
     @Override
-    public void upload(SDPDoc SDPDoc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException {
-        MultipartFile uploadedFile = SDPDoc.getFile();
+    public void upload(SDPDoc sdpDoc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException {
+        MultipartFile uploadedFile = sdpDoc.getFile();
         String fileName = uploadedFile.getOriginalFilename();
-        File savedFile = new File(rootAbsolutePath + SDPDoc.getPath() + fileName);
+        File savedFile = new File(rootAbsolutePath + sdpDoc.getPath() + fileName);
         if (savedFile.exists()) {
-            throw new FileExistsException(fileName + " exists in " + rootAbsolutePath + SDPDoc.getPath() + " .");
+            throw new FileExistsException(fileName + " exists in " + rootAbsolutePath + sdpDoc.getPath() + " .");
         }
         if (uploadedFile.getSize() > 20000000) {
             throw new FileUploadBase.FileSizeLimitExceededException(String.format("File size(%d) exceeds max upload limit(%d).", uploadedFile.getSize(), 20000000), uploadedFile.getSize(), 20000000);
@@ -65,34 +65,34 @@ public class DocServiceImpl implements DocService {
 
         int dotIndex = fileName.lastIndexOf(".");
         if (dotIndex != -1) {
-            SDPDoc.setName(fileName.substring(0, dotIndex));
-            SDPDoc.setType(fileName.substring(dotIndex + 1));
+            sdpDoc.setName(fileName.substring(0, dotIndex));
+            sdpDoc.setType(fileName.substring(dotIndex + 1));
         } else {
-            SDPDoc.setName(fileName);
-            SDPDoc.setType("");
+            sdpDoc.setName(fileName);
+            sdpDoc.setType("");
         }
-        SDPDoc.setSize(uploadedFile.getSize());
-        SDPDoc.setCommitter("czc");
-        SDPDoc.setTime(DateFormat.getDateInstance().format(new Date()));
-        docDao.insert(SDPDoc);
+        sdpDoc.setSize(uploadedFile.getSize());
+        sdpDoc.setCommitter("czc");
+        sdpDoc.setTime(DateFormat.getDateInstance().format(new Date()));
+        docDao.insert(sdpDoc);
 
     }
 
     /**
      * Download document
-     * @param SDPDoc   The document to download
+     * @param sdpDoc   The document to download
      * @param response  The HTTP response object
      * @throws IOException
      */
-    public void download(SDPDoc SDPDoc, HttpServletResponse response)//TODO
-            throws IOException {
-        File srcFile = new File(rootAbsolutePath + SDPDoc.getPath() + SDPDoc.getFullName());
+    public void download(SDPDoc sdpDoc, HttpServletResponse response)//TODO
+    throws IOException {
+        File srcFile = new File(rootAbsolutePath + sdpDoc.getPath() + sdpDoc.getFullName());
         InputStream inputStream = new FileInputStream(srcFile);
         OutputStream os = response.getOutputStream();
         response.setCharacterEncoding("utf-8");
         response.setContentType("multipart/form-data");
         response.setHeader("Content-Disposition", "attachment;fileName="
-                + SDPDoc.getFullName());
+                + sdpDoc.getFullName());
 
         byte[] b = new byte[1024];
         int length;
@@ -104,33 +104,33 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public void update(SDPDoc SDPDoc) {
+    public void update(SDPDoc sdpDoc) {
 
     }
 
     /**
      * Delete document
-     * @param SDPDoc The document to delete
+     * @param sdpDoc The document to delete
      */
     @Override
-    public void delete(SDPDoc SDPDoc) {
-        SDPDoc = docDao.findById(SDPDoc);
-        if (SDPDoc != null) {
-            String fileName = rootAbsolutePath + SDPDoc.getPath() + "/" + SDPDoc.getName() + (StringUtils.isEmpty(SDPDoc.getType()) ? "" : "." + SDPDoc.getType());
+    public void delete(SDPDoc sdpDoc) {
+        sdpDoc = docDao.findById(sdpDoc);
+        if (sdpDoc != null) {
+            String fileName = rootAbsolutePath + sdpDoc.getPath() + "/" + sdpDoc.getName() + (StringUtils.isEmpty(sdpDoc.getType()) ? "" : "." + sdpDoc.getType());
             File file = new File(fileName);
             file.delete();
 
-            docDao.delete(SDPDoc);
+            docDao.delete(sdpDoc);
         }
     }
 
     /**
      * Get document by id
-     * @param SDPDoc   The document object with id.
+     * @param sdpDoc   The document object with id.
      * @return  The document to get
      */
     @Override
-    public SDPDoc findById(SDPDoc SDPDoc) {
-        return docDao.findById(SDPDoc);
+    public SDPDoc findById(SDPDoc sdpDoc) {
+        return docDao.findById(sdpDoc);
     }
 }

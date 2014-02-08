@@ -14,15 +14,15 @@ import java.io.IOException;
  */
 public interface DocService {
 
-    public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit);
+    public GridLoad<SDPDoc> query(SDPDoc sdpDoc, int start, int limit);
 
-    public void upload(SDPDoc SDPDoc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException;
+    public void upload(SDPDoc sdpDoc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException;
 
-    public void download(SDPDoc SDPDoc, HttpServletResponse response) throws IOException;
+    public void download(SDPDoc sdpDoc, HttpServletResponse response) throws IOException;
 
-    public void update(SDPDoc SDPDoc);
+    public void update(SDPDoc sdpDoc);
 
-    public void delete(SDPDoc SDPDoc);
+    public void delete(SDPDoc sdpDoc);
 
-    public SDPDoc findById(SDPDoc SDPDoc);
+    public SDPDoc findById(SDPDoc sdpDoc);
 }

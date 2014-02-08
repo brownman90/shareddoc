@@ -8,13 +8,13 @@ import com.zchen.sdp.bean.SDPDoc;
  * @version Jan 18, 2014
  */
 public interface DocDao {
-    public void insert(SDPDoc SDPDoc);
+    public void insert(SDPDoc sdpDoc);
 
-    public void delete(SDPDoc SDPDoc);
+    public void delete(SDPDoc sdpDoc);
 
-    public void update(SDPDoc SDPDoc);
+    public void update(SDPDoc sdpDoc);
 
-    public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit);
+    public GridLoad<SDPDoc> query(SDPDoc sdpDoc, int start, int limit);
 
-    public SDPDoc findById(SDPDoc SDPDoc);
+    public SDPDoc findById(SDPDoc sdpDoc);
 }
