@@ -7,6 +7,7 @@ Ext.define('Share.view.DocGrid', {
     store: 'Docs',
 
     selType: 'checkboxmodel',
+    emptyText: "No document is in this directory. Click 'browser' to select document you want to share, then click 'Upload'.",
     tbar: [
         {
             xtype: 'form',
@@ -14,6 +15,7 @@ Ext.define('Share.view.DocGrid', {
             padding: '3 0 0 0',
             height: 29,
             items: [
+                {xtype: 'hiddenfield', name: 'path'},
                 {xtype: 'filefield', name: 'file', emptyText: 'Select Document', labelWidth: 70, allowBlank: false}
             ]},
         { action: 'upload', text: 'Upload', iconCls: 'upload', tooltip: 'Upload your Document'},

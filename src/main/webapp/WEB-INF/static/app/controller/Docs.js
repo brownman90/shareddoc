@@ -60,23 +60,18 @@ Ext.define('Share.controller.Docs', {
     },
 
     upload: function () {
-        var selectedNodes = this.getDirTree().getSelectionModel().getSelection();
-        if (selectedNodes.length == 0) {
-            Ext.CommonsMsg.alert("Warnning", "Please select a directory in left navigation tree.");
+        var pathField = this.getDocGrid().down("hiddenfield[name=path]");
+        if (pathField.getValue() == "") {
+            Ext.CommonsMsg.alert("Warning", "Please select a directory in left directory navigation.");
             return;
         }
-        var path = this.getDirTree().getSelectionModel().getSelection()[0].raw.id;
         var store = this.getDocsStore();
         var form = this.getDocGrid().down("form").getForm();
         if (form.isValid()) {
             form.submit({
                 url: '/doc/upload',
-                params: {
-                    path: path
-                },
                 waitMsg: 'Uploading your shared document ...',
                 success: function (form, data) {
-                    console.log(data);
                     store.reload();
                 },
                 failure: function (form, data) {
@@ -86,7 +81,6 @@ Ext.define('Share.controller.Docs', {
         } else {
             Ext.CommonsMsg.alert("Warnning", "Please select a document to upload.");
         }
-
     },
 
     toggleSelections: function (btn, pressed) {
