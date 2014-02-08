@@ -76,11 +76,11 @@ Ext.define('Share.controller.Docs', {
                 },
                 waitMsg: 'Uploading your shared document ...',
                 success: function (form, data) {
-                    var result = data.result;
-                    if (result.status)
-                        store.reload();
-                    else
-                        Ext.CommonsMsg.error("Error", result.message);
+                    console.log(data);
+                    store.reload();
+                },
+                failure: function (form, data) {
+                    Ext.CommonsMsg.error("Error", data.result.message);
                 }
             });
         } else {

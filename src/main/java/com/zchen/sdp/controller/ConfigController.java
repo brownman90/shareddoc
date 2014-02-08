@@ -1,5 +1,6 @@
 package com.zchen.sdp.controller;
 
+import com.zchen.extjsassistance.base.model.FormLoad;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
 import com.zchen.sdp.service.ConfigService;
@@ -25,11 +26,10 @@ public class ConfigController {
     @RequestMapping("/settings")
     public
     @ResponseBody
-    ResponseMap getSettings() throws FileNotFoundException {
+    FormLoad getSettings() throws FileNotFoundException {
         SDPConfig SDPConfig = configService.getSettings();
-        return ResponseMap.get().success().setData(SDPConfig);
+        return FormLoad.get().success().setData(SDPConfig);
     }
-
 
     @RequestMapping("/space")
     public

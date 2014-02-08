@@ -1,8 +1,9 @@
 package com.zchen.sdp.controller;
 
+import com.zchen.extjsassistance.base.model.FormSubmit;
 import com.zchen.sdp.bean.SDPDoc;
-import com.zchen.sdp.utils.ResponseGrid;
 import com.zchen.sdp.service.DocService;
+import com.zchen.sdp.utils.ResponseGrid;
 import com.zchen.sdp.utils.ResponseMap;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileExistsException;
@@ -39,13 +40,13 @@ public class DocController {
     @RequestMapping("/upload")
     public
     @ResponseBody
-    ResponseMap upload(SDPDoc SDPDoc) {
+    FormSubmit upload(SDPDoc SDPDoc) {
         try {
             docService.upload(SDPDoc);
         } catch (FileExistsException | FileUploadBase.FileSizeLimitExceededException e) {
-            return ResponseMap.get().failure("Upload failed. " + e.getMessage());
+            return FormSubmit.get().failure().setMessage("Upload failed. " + e.getMessage());
         }
-        return ResponseMap.get().success();
+        return FormSubmit.get().success();
     }
 
     @RequestMapping("/download")

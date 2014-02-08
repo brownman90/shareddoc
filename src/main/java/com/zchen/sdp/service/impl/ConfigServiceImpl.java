@@ -4,7 +4,6 @@ import com.zchen.extjsassistance.fs.*;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
 import com.zchen.sdp.service.ConfigService;
-import com.zchen.sdp.utils.Utils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -96,6 +95,6 @@ public class ConfigServiceImpl implements ConfigService {
      */
     @Override
     public String getSDPCurrentPath() {
-        return Utils.slashExchange( "D:/shared_doc");
+        return ExtjsDirectoryUtils.slashExchange("D:/shared_doc");
     }
 }

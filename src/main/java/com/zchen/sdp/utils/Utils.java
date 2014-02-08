@@ -7,11 +7,7 @@ import java.util.HashMap;
  * @version Jan 18, 2014
  */
 public class Utils {
-    public static HashMap<String, Object> emptyMap(){
+    public static HashMap<String, Object> emptyMap() {
         return new HashMap<>();
-    }
-
-    public static String slashExchange(String value){
-        return value.replaceAll("\\\\", "/");
     }
 }
