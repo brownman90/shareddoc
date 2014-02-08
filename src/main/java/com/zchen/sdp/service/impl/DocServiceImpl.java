@@ -1,9 +1,9 @@
 package com.zchen.sdp.service.impl;
 
+import com.zchen.extjsassistance.base.model.GridLoad;
 import com.zchen.sdp.bean.SDPDoc;
 import com.zchen.sdp.dao.DocDao;
 import com.zchen.sdp.service.DocService;
-import com.zchen.sdp.utils.ResponseGrid;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.lang3.StringUtils;
@@ -36,8 +36,8 @@ public class DocServiceImpl implements DocService {
      * @return  ResponseGrid    Document list with pager
      */
     @Override
-    public ResponseGrid query(SDPDoc SDPDoc, int start, int limit) {
-        return new ResponseGrid(docDao.query(SDPDoc, start, limit), docDao.count());
+    public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit) {
+        return new GridLoad<>(docDao.query(SDPDoc, start, limit), docDao.count());
     }
 
     /**

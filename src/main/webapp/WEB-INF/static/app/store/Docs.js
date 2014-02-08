@@ -14,8 +14,7 @@ Ext.define('Share.store.Docs', {
         },
         reader: {
             type: 'json',
-            root: 'rows',
-            totalProperty: 'count'
+            root: 'rows'
         }
     }
 });

@@ -1,9 +1,9 @@
 package com.zchen.sdp.controller;
 
 import com.zchen.extjsassistance.base.model.FormSubmit;
+import com.zchen.extjsassistance.base.model.GridLoad;
 import com.zchen.sdp.bean.SDPDoc;
 import com.zchen.sdp.service.DocService;
-import com.zchen.sdp.utils.ResponseGrid;
 import com.zchen.sdp.utils.ResponseMap;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileExistsException;
@@ -33,7 +33,7 @@ public class DocController {
     @RequestMapping("/list")
     public
     @ResponseBody
-    ResponseGrid list(SDPDoc SDPDoc, int start, int limit) {
+    GridLoad<SDPDoc> list(SDPDoc SDPDoc, int start, int limit) {
         return docService.query(SDPDoc, start, limit);
     }
 

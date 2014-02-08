@@ -1,7 +1,7 @@
 package com.zchen.sdp.service;
 
+import com.zchen.extjsassistance.base.model.GridLoad;
 import com.zchen.sdp.bean.SDPDoc;
-import com.zchen.sdp.utils.ResponseGrid;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileExistsException;
 
@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 public interface DocService {
 
-    public ResponseGrid query(SDPDoc SDPDoc, int start, int limit);
+    public GridLoad<SDPDoc> query(SDPDoc SDPDoc, int start, int limit);
 
     public void upload(SDPDoc SDPDoc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException;
 
