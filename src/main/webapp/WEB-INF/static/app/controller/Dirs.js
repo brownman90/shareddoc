@@ -50,8 +50,6 @@ Ext.define('Share.controller.Dirs', {
             return;
         }
         pathField.setValue(path);
-
-        docStore.proxy.setExtraParam("name", "");
         docStore.proxy.setExtraParam("path", path);
         docStore.load();
 

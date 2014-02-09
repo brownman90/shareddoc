@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/static/stylesheets/icon.css">
     <script type="text/javascript" src="/static/lib/ext-all-debug.js"></script>
     <script type="text/javascript" src="/static/lib/ProgressBarPager.js"></script>
+    <script type="text/javascript" src="/static/lib/SearchField.js"></script>
     <script type="text/javascript" src="/static/lib/commons.js"></script>
     <script type="text/javascript" src="/static/app.js"></script>
 </head>
