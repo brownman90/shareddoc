@@ -1,10 +1,9 @@
 package com.zchen.sdp.controller;
 
-import com.zchen.extjsassistance.base.model.FormLoad;
+import com.zchen.extjsassistance.base.model.AjaxResult;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
 import com.zchen.sdp.service.ConfigService;
-import com.zchen.sdp.utils.ResponseMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,22 +25,22 @@ public class ConfigController {
     @RequestMapping("/settings")
     public
     @ResponseBody
-    FormLoad getSettings() throws FileNotFoundException {
+    AjaxResult getSettings() throws FileNotFoundException {
         SDPConfig SDPConfig = configService.getSettings();
-        return FormLoad.get().success().setData(SDPConfig);
+        return AjaxResult.get().success().setData(SDPConfig);
     }
 
     @RequestMapping("/space")
     public
     @ResponseBody
-    ResponseMap getFreeSpace(String path) {
+    AjaxResult getFreeSpace(String path) {
         long freeSize;
         try {
             freeSize = configService.getFreeSpace(path);
         } catch (FileNotFoundException e) {
-            return ResponseMap.get().failure(e.getMessage());
+            return AjaxResult.get().failure().setMessage(e.getMessage());
         }
-        return ResponseMap.get().success().setData(freeSize);
+        return AjaxResult.get().success().setData(freeSize);
     }
 
     @RequestMapping("/fs")
@@ -54,8 +53,8 @@ public class ConfigController {
     @RequestMapping("/fs/home")
     public
     @ResponseBody
-    ResponseMap getFileSystemHome() {
-        return ResponseMap.get()
+    AjaxResult getFileSystemHome() {
+        return AjaxResult.get()
                 .success()
                 .setData(configService.getFileSystemHome());
     }
@@ -63,8 +62,8 @@ public class ConfigController {
     @RequestMapping("/fs/current")
     public
     @ResponseBody
-    ResponseMap getSDPCurrentLocation() {
-        return ResponseMap.get()
+    AjaxResult getSDPCurrentLocation() {
+        return AjaxResult.get()
                 .success()
                 .setData(configService.getSDPCurrentPath());
     }

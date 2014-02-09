@@ -1,11 +1,10 @@
 package com.zchen.sdp.controller;
 
-import com.zchen.extjsassistance.base.model.FormSubmit;
+import com.zchen.extjsassistance.base.model.AjaxResult;
 import com.zchen.extjsassistance.base.model.GridLoad;
 import com.zchen.extjsassistance.base.model.GridParams;
 import com.zchen.sdp.bean.SDPDoc;
 import com.zchen.sdp.service.DocService;
-import com.zchen.sdp.utils.ResponseMap;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileExistsException;
 import org.springframework.stereotype.Controller;
@@ -41,13 +40,13 @@ public class DocController {
     @RequestMapping("/upload")
     public
     @ResponseBody
-    FormSubmit upload(SDPDoc sdpDoc) {
+    AjaxResult upload(SDPDoc sdpDoc) {
         try {
             docService.upload(sdpDoc);
         } catch (FileExistsException | FileUploadBase.FileSizeLimitExceededException e) {
-            return FormSubmit.get().failure().setMessage("Upload failed. " + e.getMessage());
+            return AjaxResult.get().failure().setMessage("Upload failed. " + e.getMessage());
         }
-        return FormSubmit.get().success();
+        return AjaxResult.get().success();
     }
 
     @RequestMapping("/download")
@@ -76,19 +75,19 @@ public class DocController {
     @RequestMapping("delete")
     public
     @ResponseBody
-    ResponseMap delete(SDPDoc sdpDoc) {
+    AjaxResult delete(SDPDoc sdpDoc) {
         docService.delete(sdpDoc);
-        return ResponseMap.get().success();
+        return AjaxResult.get().success();
     }
 
     @RequestMapping("deletes")
     public
     @ResponseBody
-    ResponseMap deletes(int[] idList) {
+    AjaxResult deletes(int[] idList) {
         for (int id : idList) {
             docService.delete(new SDPDoc(id));
         }
-        return ResponseMap.get().success();
+        return AjaxResult.get().success();
     }
 
 

@@ -73,7 +73,7 @@ Ext.define('Share.controller.Docs', {
             return;
         }
         var store = this.getDocsStore();
-        var form = this.getDocGrid().down("form[itemId=uploadForm]").getForm();
+        var form = this.getDocGrid().down("form").getForm();
         if (form.isValid()) {
             form.submit({
                 url: '/doc/upload',
@@ -117,8 +117,8 @@ Ext.define('Share.controller.Docs', {
                     },
                     success: function (response) {
                         var result = Ext.JSON.decode(response.responseText);
-                        if (result.status)
-                            store.removeAll(records);
+                        if (result.success)
+                            store.remove(records);
                         else
                             Ext.CommonsMsg.error('Error', result.message);
                     }
@@ -180,7 +180,7 @@ Ext.define('Share.controller.Docs', {
             },
             success: function (res) {
                 var result = Ext.JSON.decode(res.responseText);
-                if (result.status) {
+                if (result.success) {
                     var freeSize = result.data;
                     limitSlider.setMaxValue(freeSize, true);
                 } else

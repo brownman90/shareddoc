@@ -95,6 +95,6 @@ public class ConfigServiceImpl implements ConfigService {
      */
     @Override
     public String getSDPCurrentPath() {
-        return ExtjsDirectoryUtils.slashExchange("D:/shared_doc");
+        return DirectoryUtils.slashExchange("D:/shared_doc");
     }
 }

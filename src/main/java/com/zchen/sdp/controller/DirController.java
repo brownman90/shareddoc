@@ -1,9 +1,9 @@
 package com.zchen.sdp.controller;
 
+import com.zchen.extjsassistance.base.model.AjaxResult;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.Dir;
 import com.zchen.sdp.service.DirService;
-import com.zchen.sdp.utils.ResponseMap;
 import org.apache.commons.io.FileExistsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,25 +33,27 @@ public class DirController {
     @RequestMapping("/delete")
     public
     @ResponseBody
-    ResponseMap delete(Dir dir) {
+    AjaxResult delete(Dir dir) {
         try {
             dirService.delete(dir);
         } catch (FileExistsException e) {
-            return ResponseMap.get().failure("Delete directory failed. " + e.getMessage());
+            return AjaxResult.get().failure()
+                    .setMessage("Delete directory failed. " + e.getMessage());
         }
-        return ResponseMap.get().success();
+        return AjaxResult.get().success();
     }
 
     @RequestMapping("/create")
     public
     @ResponseBody
-    ResponseMap create(Dir dir) {
+    AjaxResult create(Dir dir) {
         try {
             dirService.create(dir);
         } catch (FileExistsException e) {
-            return ResponseMap.get().failure("Create directory failed. " + e.getMessage());
+            return AjaxResult.get().failure()
+                    .setMessage("Create directory failed. " + e.getMessage());
         }
-        return ResponseMap.get().success();
+        return AjaxResult.get().success();
     }
 
 }

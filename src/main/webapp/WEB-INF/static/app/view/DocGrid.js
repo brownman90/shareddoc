@@ -70,7 +70,7 @@ Ext.define('Share.view.DocGrid', {
                                 });
                                 store.getProxy().destroy(operation, function (data) {
                                     var result = Ext.JSON.decode(data.response.responseText);
-                                    if (result.status) {
+                                    if (result.success) {
                                         store.remove(record);
                                     } else {
                                         Ext.CommonsMsg.error('Error', result.message);
