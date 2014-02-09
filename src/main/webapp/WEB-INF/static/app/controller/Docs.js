@@ -53,17 +53,10 @@ Ext.define('Share.controller.Docs', {
     },
 
     searchDocs: function () {
-        var nameField = this.getDocGrid().down("textfield[name=name]"),
-            pathField = this.getDocGrid().down("hiddenfield[name=path]");
+        var nameField = this.getDocGrid().down("textfield[name=name]");
         var store = this.getDocsStore();
-        var read = new Ext.data.Operation({
-            action: 'read',
-            params: {
-                name: nameField.getValue(),
-                path: pathField.getValue()
-            }
-        });
-        store.load(read);
+        store.proxy.setExtraParam("name", nameField.getValue());
+        store.load();
     },
 
     upload: function () {
