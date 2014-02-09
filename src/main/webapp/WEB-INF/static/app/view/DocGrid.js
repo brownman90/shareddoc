@@ -4,6 +4,7 @@ Ext.define('Share.view.DocGrid', {
 
     region: 'center',
     title: 'Document List',
+    titleAlign: 'center',
     store: 'Docs',
 
     selType: 'checkboxmodel',

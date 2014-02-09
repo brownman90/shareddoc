@@ -81,25 +81,24 @@ Ext.define('Share.controller.Dirs', {
         var node = this.getDirTree().getSelectionModel().getLastSelected();
         Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
             if (v == "ok") {
-                var operation = new Ext.data.Operation({
-                    action: 'create',
+                Ext.Ajax.request({
+                    url: '/dir/create',
                     params: {
                         id: node.raw.id + name,
                         text: name
+                    },
+                    success: function (response) {
+                        var result = Ext.JSON.decode(response.responseText);
+                        if (result.success) {
+                            node.appendChild({id: node.raw.id + name + "/", text: name, loaded: true});
+                        } else {
+                            Ext.CommonsMsg.error('Error', result.message);
+                        }
+                        node.expand();
                     }
-                });
-                var store = this.getDirsStore();
-                store.getProxy().create(operation, function (data) {
-                    var result = Ext.JSON.decode(data.response.responseText);
-                    if (result.status) {
-                        node.appendChild({id: node.raw.id + name + "/", text: name, loaded: true});
-                    } else {
-                        Ext.CommonsMsg.error('Error', result.message);
-                    }
-                    node.expand();
                 });
             }
-        });
+        }, this);
     },
 
     deleteDir: function () {
@@ -107,20 +106,19 @@ Ext.define('Share.controller.Dirs', {
         var confirm = Ext.String.format("Are you sure you want to delete the directory {0} ?", node.raw.id);
         Ext.Msg.confirm("Confirm", confirm, function (v) {
             if (v === "yes") {
-                var operation = new Ext.data.Operation({
-                    action: 'destroy',
+                Ext.Ajax.request({
+                    url: '/dir/delete',
                     params: {
                         id: node.raw.id,
                         text: node.raw.text
-                    }
-                });
-                var store = this.getDirsStore();
-                store.getProxy().destroy(operation, function (data) {
-                    var result = Ext.JSON.decode(data.response.responseText);
-                    if (result.status) {
-                        node.remove(true);
-                    } else {
-                        Ext.CommonsMsg.error('Error', result.message);
+                    },
+                    success: function (response) {
+                        var result = Ext.JSON.decode(response.responseText);
+                        if (result.success) {
+                            node.remove();
+                        } else {
+                            Ext.CommonsMsg.error('Error', result.message);
+                        }
                     }
                 });
             }
