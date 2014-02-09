@@ -47,7 +47,7 @@ Ext.define('Share.view.ConfigWin', {
                                     return Ext.String.format("{0} - {1}%", value, ratio);
                                 },
                                 displayFormatter: CommonsUtils.readableSize,
-                                sliderFormatter: CommonsUtils.disReadableSize
+                                sliderFormatter: CommonsUtils.unReadableSize
                             },
                             {
                                 xtype: 'displayslider',

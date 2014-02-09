@@ -26,9 +26,6 @@ Ext.define('Share.view.DocGrid', {
         { action: 'download', text: 'Download', iconCls: 'download', tooltip: "Download Documents", disabled: true},
         '->',
         { xtype: 'searchfield', fieldLabel: 'Search', labelWidth: 50, name: 'name', store: 'Docs', width: 250, emptyText: 'Document Name', paramName: 'name'}
-//        { xtype: 'textfield', name: 'name', emptyText: 'Document Name'},
-//
-//        { action: 'search', text: 'Search', iconCls: 'search', tooltip: 'Search Docs' }
     ],
     columns: [
         {header: 'Name', dataIndex: 'name', flex: 3, renderer: function (value, md, record) {

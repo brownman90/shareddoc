@@ -262,7 +262,7 @@ CommonsUtils.readableSize = function (size) {
     return resultSize + unit;
 }
 
-CommonsUtils.disReadableSize = function (value) {
+CommonsUtils.unReadableSize = function (value) {
     var units = ['KB', 'MB', 'GB'];
     var units = {
         'KB': 1024,
