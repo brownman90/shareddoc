@@ -609,7 +609,8 @@ Ext.define('Commons.window.BrowserWindow', {
                         iconCls: 'refresh',
                         tooltip: 'Refresh',
                         handler: function () {
-                            me.down("treepanel").getStore().reload();
+                            var node = me.down("treepanel").getSelectionModel().getLastSelected();
+                            store.load({node: node});
                         }
                     }
                 ],

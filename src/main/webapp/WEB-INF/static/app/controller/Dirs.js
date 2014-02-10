@@ -29,7 +29,7 @@ Ext.define('Share.controller.Dirs', {
                 click: this.refreshTree
             },
             'dirmenu menuitem[action=refresh]': {
-                click: this.refreshTree
+                click: this.refreshNode
             },
             'dirmenu menuitem[action=create]': {
                 click: this.createDir
@@ -72,7 +72,10 @@ Ext.define('Share.controller.Dirs', {
     },
 
     refreshNode: function () {
-
+        var tree = this.getDirTree(),
+            store = this.getDirsStore();
+        var node = tree.getSelectionModel().getLastSelected();
+        store.load({node: node});
     },
 
     createDir: function () {
