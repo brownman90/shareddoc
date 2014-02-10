@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.FileAlreadyExistsException;
 
 /**
  * @author Zhouce Chen
@@ -76,6 +78,9 @@ public class ConfigController {
     AjaxResult createDirectory(String id) {
         try {
             ExtjsDirectoryAssistant.createDirectory(id);
+        }  catch (FileAlreadyExistsException e) {
+            return AjaxResult.get().failure()
+                    .setMessage("Create directory failed. Directory " + id + " has exists.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,6 +93,9 @@ public class ConfigController {
     AjaxResult deleteDirectory(String id) {
         try {
             ExtjsDirectoryAssistant.deleteDirectory(id);
+        } catch (DirectoryNotEmptyException e) {
+            return AjaxResult.get().failure()
+                    .setMessage("Delete directory failed. Directory " + id + " is not empty.");
         } catch (IOException e) {
             e.printStackTrace();
         }

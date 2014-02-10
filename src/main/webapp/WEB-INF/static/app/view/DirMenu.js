@@ -17,7 +17,6 @@ Ext.define('Share.view.DirMenu', {
             },
             {
                 action: 'delete',
-                id: 'tree-menu-de',
                 text: 'Delete'
             }
         ];

@@ -63,12 +63,12 @@ Ext.define('Share.controller.Dirs', {
     nodeContext: function (tree, node, item, index, e) {
         e.stopEvent();
         Share.TreeMenu.showAt(e.getXY());
-//        var refreshBtn = AM.TreeMenu.down('menuitem[id=tree-menu-refresh]');
-//        if (node.isLeaf()) {
-//            refreshBtn.disable();
-//        } else {
-//            refreshBtn.enable();
-//        }
+        var deleteBtn = Share.TreeMenu.down('menuitem[action=delete]');
+        if(node.isRoot()){
+            deleteBtn.disable();
+        } else {
+            deleteBtn.enable();
+        }
     },
 
     refreshNode: function () {
@@ -85,13 +85,13 @@ Ext.define('Share.controller.Dirs', {
                 Ext.Ajax.request({
                     url: '/dir/create',
                     params: {
-                        id: node.raw.id + name,
+                        id: node.raw.id +"/"+ name,
                         text: name
                     },
                     success: function (response) {
                         var result = Ext.JSON.decode(response.responseText);
                         if (result.success) {
-                            node.appendChild({id: node.raw.id + name + "/", text: name, loaded: true});
+                            node.appendChild({id: node.raw.id +"/"+ name, text: name, loaded: true});
                         } else {
                             Ext.CommonsMsg.error('Error', result.message);
                         }
