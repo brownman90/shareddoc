@@ -1,6 +1,7 @@
 package com.zchen.sdp.controller;
 
 import com.zchen.extjsassistance.base.model.AjaxResult;
+import com.zchen.extjsassistance.fs.ExtjsDirectoryAssistant;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
 import com.zchen.sdp.service.ConfigService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * @author Zhouce Chen
@@ -66,6 +68,30 @@ public class ConfigController {
         return AjaxResult.get()
                 .success()
                 .setData(configService.getSDPCurrentPath());
+    }
+
+    @RequestMapping("/fs/create")
+    public
+    @ResponseBody
+    AjaxResult createDirectory(String id) {
+        try {
+            ExtjsDirectoryAssistant.createDirectory(id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return AjaxResult.get().success();
+    }
+
+    @RequestMapping("/fs/delete")
+    public
+    @ResponseBody
+    AjaxResult deleteDirectory(String id) {
+        try {
+            ExtjsDirectoryAssistant.deleteDirectory(id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return AjaxResult.get().success();
     }
 
 

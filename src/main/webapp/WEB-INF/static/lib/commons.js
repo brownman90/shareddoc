@@ -542,29 +542,66 @@ Ext.define('Commons.window.BrowserWindow', {
                         iconCls: 'location',
                         tooltip: 'Current Directory',
                         handler: function () {
-                            Ext.Ajax.request({
-                                url: me.url + "/current",
-                                success: function (res) {
-                                    var result = Ext.JSON.decode(res.responseText);
-                                    var current = result.data;
-                                    me.down("treepanel").selectPath(me.pathFormat(current), 'id', '$');
-                                }
-                            });
+                           me.selectCurrentLocation();
                         }
                     },
                     '-',
                     {
                         iconCls: 'add',
-                        tooltip: 'Create Directory',
+                        tooltip: 'New Folder ...',
+                        disabled: true,
+                        action: 'add',
                         handler: function () {
-
+                            var node = me.down("treepanel").getSelectionModel().getLastSelected();
+                            Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
+                                if (v == "ok") {
+                                    Ext.Ajax.request({
+                                        url: me.url + "/create",
+                                        params: {
+                                            id: node.raw.id + name,
+                                            text: name
+                                        },
+                                        success: function (response) {
+                                            var result = Ext.JSON.decode(response.responseText);
+                                            if (result.success) {
+                                                node.appendChild({id: node.raw.id + name + "/", text: name, loaded: true});
+                                            } else {
+                                                Ext.CommonsMsg.error('Error', result.message);
+                                            }
+                                            node.expand();
+                                        }
+                                    });
+                                }
+                            }, this);
                         }
                     },
                     {
                         iconCls: 'delete',
-                        tooltip: 'Delete Directory',
+                        tooltip: 'Delete Folder',
+                        disabled: true,
+                        action: 'delete',
                         handler: function () {
-
+                            var node = me.down("treepanel").getSelectionModel().getLastSelected();
+                            var confirm = Ext.String.format("Are you sure you want to delete the directory {0} ?", node.raw.id);
+                            Ext.Msg.confirm("Confirm", confirm, function (v) {
+                                if (v === "yes") {
+                                    Ext.Ajax.request({
+                                        url: me.url + "/delete",
+                                        params: {
+                                            id: node.raw.id,
+                                            text: node.raw.text
+                                        },
+                                        success: function (response) {
+                                            var result = Ext.JSON.decode(response.responseText);
+                                            if (result.success) {
+                                                node.remove();
+                                            } else {
+                                                Ext.CommonsMsg.error('Error', result.message);
+                                            }
+                                        }
+                                    });
+                                }
+                            }, this);
                         }
                     },
                     '-',
@@ -577,8 +614,22 @@ Ext.define('Commons.window.BrowserWindow', {
                     }
                 ],
                 listeners: {
-                    itemdblclick: function (tree, record) {
+                    itemdblclick: function (tree, records) {
 
+                    },
+                    selectionchange: function ( tree, records ){
+                        var addBtn = me.down("button[action=add]"),
+                            deleteBtn = me.down("button[action=delete]");
+                        if (records.length === 0) {
+                            addBtn.disable();
+                            deleteBtn.disable();
+                        } else {
+                            addBtn.enable();
+                            deleteBtn.enable();
+                        }
+                    },
+                    viewready: function () {
+                        me.selectCurrentLocation();
                     }
                 }
 
@@ -615,6 +666,18 @@ Ext.define('Commons.window.BrowserWindow', {
         value = dirs.join("$");
         value = value.replace(/\/\//g, "\/");
         return "$root$" + value;
+    },
+
+    selectCurrentLocation: function(){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.url + "/current",
+            success: function (res) {
+                var result = Ext.JSON.decode(res.responseText);
+                var current = result.data;
+                me.down("treepanel").selectPath(me.pathFormat(current), 'id', '$');
+            }
+        });
     }
 });
 

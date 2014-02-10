@@ -98,6 +98,7 @@ Ext.define('Share.view.DocGrid', {
 
     listeners: {
         viewready: function (grid) {
+            //hide the check column on view ready
             Ext.Array.insert(grid.columns, 0, [grid.columnManager.columns[0]]);
             grid.columns[0].hide();
         }
