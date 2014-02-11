@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Implementation of SDP system settings
@@ -19,6 +24,8 @@ import java.io.FileNotFoundException;
 
 @Service
 public class ConfigServiceImpl implements ConfigService {
+
+    public static final String SDP_FLAG_FILE = "/.shareddoc";
 
     @Resource
     private ConfigDao configDao;
@@ -40,6 +47,18 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public void setConfig(SDPConfig config) {
+        SDPConfig origin = configDao.getConfig();
+        if(!origin.getLocation().equals(config.getLocation())){
+            Path path = Paths.get(config.getLocation() + SDP_FLAG_FILE);
+            if(Files.notExists(path)){
+                try {
+                    Files.createFile(path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         configDao.setConfig(config);
     }
 
@@ -76,7 +95,7 @@ public class ConfigServiceImpl implements ConfigService {
         config.setIconHandler(new IconHandler() {
             @Override
             public String getIconClass(DirectoryNode directoryNode) {
-                File file = new File(directoryNode.getId() + "/.shareddoc");
+                File file = new File(directoryNode.getId() + SDP_FLAG_FILE);
                 if (file.exists()) {
                     return "favicon";
                 }
@@ -101,6 +120,26 @@ public class ConfigServiceImpl implements ConfigService {
      */
     @Override
     public String getSDPCurrentPath() {
-        return DirectoryUtils.slashExchange("D:/shared_doc");
+        return DirectoryUtils.slashExchange(configDao.getConfig().getLocation());
+    }
+
+    @Override
+    public void deleteDirectory(String pathStr) throws IOException{
+        Path flagFile = Paths.get(pathStr + SDP_FLAG_FILE);
+        //delete flag file if it exists
+        boolean isSDP =  Files.deleteIfExists(flagFile);
+        Path deletedPath = Paths.get(pathStr);
+        try {
+            //delete directory
+            Files.delete(deletedPath);
+        } catch (DirectoryNotEmptyException e){
+            if(isSDP){
+                //if flag file is deleted, create it
+                Files.createFile(flagFile);
+            }
+            throw e;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -100,7 +100,7 @@ public class ConfigController {
     @ResponseBody
     AjaxResult deleteDirectory(String id) {
         try {
-            ExtjsDirectoryAssistant.deleteDirectory(id);
+            configService.deleteDirectory(id);
         } catch (DirectoryNotEmptyException e) {
             return AjaxResult.get().failure()
                     .setMessage("Delete directory failed. Directory " + id + " is not empty.");

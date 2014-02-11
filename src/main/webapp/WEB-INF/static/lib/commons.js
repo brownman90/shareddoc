@@ -558,13 +558,13 @@ Ext.define('Commons.window.BrowserWindow', {
                                     Ext.Ajax.request({
                                         url: me.url + "/create",
                                         params: {
-                                            id: node.raw.id + name,
+                                            id: node.raw.id + "/" + name,
                                             text: name
                                         },
                                         success: function (response) {
                                             var result = Ext.JSON.decode(response.responseText);
                                             if (result.success) {
-                                                node.appendChild({id: node.raw.id + name + "/", text: name, loaded: true});
+                                                node.appendChild({id: node.raw.id + "/" + name, text: name, loaded: true});
                                             } else {
                                                 Ext.CommonsMsg.error('Error', result.message);
                                             }

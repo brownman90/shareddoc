@@ -4,6 +4,7 @@ import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * @author Zhouce Chen
@@ -22,4 +23,6 @@ public interface ConfigService {
     public String getFileSystemHome();
 
     public String getSDPCurrentPath();
+
+    public void deleteDirectory(String dirPath) throws IOException;
 }
