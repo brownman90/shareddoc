@@ -3,9 +3,11 @@ package com.zchen.sdp.service.impl;
 import com.zchen.extjsassistance.fs.*;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
+import com.zchen.sdp.dao.ConfigDao;
 import com.zchen.sdp.service.ConfigService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -18,23 +20,27 @@ import java.io.FileNotFoundException;
 @Service
 public class ConfigServiceImpl implements ConfigService {
 
+    @Resource
+    private ConfigDao configDao;
 
     /**
      * Get SDP system settings
      * @return  The SDP system settings
      */
     @Override
-    public SDPConfig getSettings() {
-        SDPConfig SDPConfig = new SDPConfig();
-        SDPConfig.setLocation("D:/shared_doc");
-        SDPConfig.setLimit(new Long("30000000000"));
+    public SDPConfig getConfig() {
+        SDPConfig SDPConfig = configDao.getConfig();
         try {
             SDPConfig.setFreeSpace(this.getFreeSpace("D:/shared_doc"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        SDPConfig.setExceed(85);
         return SDPConfig;
+    }
+
+    @Override
+    public void setConfig(SDPConfig config) {
+        configDao.setConfig(config);
     }
 
     /**

@@ -11,7 +11,9 @@ import java.io.FileNotFoundException;
  */
 public interface ConfigService {
 
-    public SDPConfig getSettings();
+    public SDPConfig getConfig();
+
+    public void setConfig(SDPConfig config);
 
     public Long getFreeSpace(String path) throws FileNotFoundException;
 

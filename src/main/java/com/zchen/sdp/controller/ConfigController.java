@@ -26,12 +26,20 @@ public class ConfigController {
     @Resource
     private ConfigService configService;
 
-    @RequestMapping("/settings")
+    @RequestMapping("/get")
     public
     @ResponseBody
-    AjaxResult getSettings() throws FileNotFoundException {
-        SDPConfig SDPConfig = configService.getSettings();
+    AjaxResult getConfig() throws FileNotFoundException {
+        SDPConfig SDPConfig = configService.getConfig();
         return AjaxResult.get().success().setData(SDPConfig);
+    }
+
+    @RequestMapping("/set")
+    public
+    @ResponseBody
+    AjaxResult setConfig(SDPConfig config){
+        configService.setConfig(config);
+        return AjaxResult.get().success();
     }
 
     @RequestMapping("/space")

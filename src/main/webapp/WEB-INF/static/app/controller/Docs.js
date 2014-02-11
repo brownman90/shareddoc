@@ -47,6 +47,9 @@ Ext.define('Share.controller.Docs', {
             },
             'browserwindow[id=configBrowser]': {
                 afterSave: this.checkLocationSize
+            },
+            'configwin button[action=save]': {
+                click: this.saveConfig
             }
 
         });
@@ -140,7 +143,7 @@ Ext.define('Share.controller.Docs', {
 
         var form = this.getConfigWin().down("form");
         form.load({
-            url: '/config/settings',
+            url: '/config/get',
             success: function (f, action) {
                 var result = action.result.data;
                 var limit = result.limit,
@@ -180,5 +183,22 @@ Ext.define('Share.controller.Docs', {
                     Ext.CommonsMsg.error('Error', result.message);
             }
         });
+    },
+
+    saveConfig: function(btn){
+        var win = btn.up("window"),
+            form = win.down("form").getForm();
+        if(form.isValid()){
+            form.submit({
+                url: '/config/set',
+                waitMsg: 'Setting SDP configuration ...',
+                success: function (form, data) {
+                    win.close();
+                },
+                failure: function (form, data) {
+                    Ext.CommonsMsg.error("Error", data.result.message);
+                }
+            });
+        }
     }
 });
