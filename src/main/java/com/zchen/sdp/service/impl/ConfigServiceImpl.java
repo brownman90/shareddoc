@@ -70,11 +70,17 @@ public class ConfigServiceImpl implements ConfigService {
      */
     @Override
     public Long getFreeSpace(String path) throws FileNotFoundException {
-        File file = new File(path);
-        if (!file.exists()) {
+        Path directory = Paths.get(path);
+        if (Files.notExists(directory)) {
             throw new FileNotFoundException(path + " doesn't exist.");
         }
-        return file.getFreeSpace();
+        Long size = null;
+        try {
+            size = Files.getFileStore(directory).getUsableSpace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return size;
     }
 
     /**
@@ -124,11 +130,11 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public void deleteDirectory(String pathStr) throws IOException{
-        Path flagFile = Paths.get(pathStr + SDP_FLAG_FILE);
+    public void deleteDirectory(String path) throws IOException{
+        Path flagFile = Paths.get(path + SDP_FLAG_FILE);
         //delete flag file if it exists
         boolean isSDP =  Files.deleteIfExists(flagFile);
-        Path deletedPath = Paths.get(pathStr);
+        Path deletedPath = Paths.get(path);
         try {
             //delete directory
             Files.delete(deletedPath);
