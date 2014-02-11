@@ -533,7 +533,7 @@ Ext.define('Commons.window.BrowserWindow', {
                                 success: function (res) {
                                     var result = Ext.JSON.decode(res.responseText);
                                     var home = result.data;
-                                    me.down("treepanel").selectPath(me.pathFormat(home), 'id', '$');
+                                    me.down("treepanel").selectPath("/Root/" + home.replace(/:/g, ":\\"), 'text');
                                 }
                             });
                         }
@@ -552,7 +552,8 @@ Ext.define('Commons.window.BrowserWindow', {
                         disabled: true,
                         action: 'add',
                         handler: function () {
-                            var node = me.down("treepanel").getSelectionModel().getLastSelected();
+                            var tree = me.down("treepanel");
+                            var node = tree.getSelectionModel().getLastSelected();
                             Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
                                 if (v == "ok") {
                                     Ext.Ajax.request({
@@ -565,6 +566,7 @@ Ext.define('Commons.window.BrowserWindow', {
                                             var result = Ext.JSON.decode(response.responseText);
                                             if (result.success) {
                                                 node.appendChild({id: node.raw.id + "/" + name, text: name, loaded: true});
+                                                tree.selectPath(node.lastChild.getPath('text'), 'text');
                                             } else {
                                                 Ext.CommonsMsg.error('Error', result.message);
                                             }
@@ -581,8 +583,10 @@ Ext.define('Commons.window.BrowserWindow', {
                         disabled: true,
                         action: 'delete',
                         handler: function () {
-                            var node = me.down("treepanel").getSelectionModel().getLastSelected();
-                            var confirm = Ext.String.format("Are you sure you want to delete the directory {0} ?", node.raw.id);
+                            var tree = me.down("treepanel");
+                            var node = tree.getSelectionModel().getLastSelected();
+                            var parentNode = node.parentNode;
+                            var confirm = Ext.String.format("Are you sure you want to delete the folder {0} ?", node.raw.id);
                             Ext.Msg.confirm("Confirm", confirm, function (v) {
                                 if (v === "yes") {
                                     Ext.Ajax.request({
@@ -595,6 +599,7 @@ Ext.define('Commons.window.BrowserWindow', {
                                             var result = Ext.JSON.decode(response.responseText);
                                             if (result.success) {
                                                 node.remove();
+                                                tree.selectPath(parentNode.getPath('text'), 'text');
                                             } else {
                                                 Ext.CommonsMsg.error('Error', result.message);
                                             }
@@ -657,18 +662,6 @@ Ext.define('Commons.window.BrowserWindow', {
         me.close();
     },
 
-    pathFormat: function (value) {
-        value = value.replace(/\//g, "$");
-        value = value.replace(/:/g, ":/");
-        var dirs = value.split("$");
-        for (var i = 1; i < dirs.length; i++) {
-            dirs[i] = dirs[i - 1] + "/" + dirs[i];
-        }
-        value = dirs.join("$");
-        value = value.replace(/\/\//g, "\/");
-        return "$root$" + value;
-    },
-
     selectCurrentLocation: function(){
         var me = this;
         Ext.Ajax.request({
@@ -676,7 +669,7 @@ Ext.define('Commons.window.BrowserWindow', {
             success: function (res) {
                 var result = Ext.JSON.decode(res.responseText);
                 var current = result.data;
-                me.down("treepanel").selectPath(me.pathFormat(current), 'id', '$');
+                me.down("treepanel").selectPath("/Root/" + current.replace(/:/g, ":\\"), 'text');
             }
         });
     }
