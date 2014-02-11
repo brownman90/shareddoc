@@ -507,6 +507,14 @@ Ext.define('Commons.window.BrowserWindow', {
     initComponent: function () {
         var me = this;
 
+        var menu = Ext.createWidget("browserwindowmenu",{
+            selectHomeDirectory:  Ext.Function.bind(me.selectHomeDirectory, me),
+            selectCurrentLocation: Ext.Function.bind(me.selectCurrentLocation, me),
+            createDirectory: Ext.Function.bind(me.createDirectory, me),
+            deleteDirectory: Ext.Function.bind(me.deleteDirectory, me),
+            refreshNode: Ext.Function.bind(me.refreshNode, me)
+        });
+
         var store = Ext.create('Ext.data.TreeStore', {
             fields: ['id', 'text'],
             proxy: {
@@ -527,23 +535,12 @@ Ext.define('Commons.window.BrowserWindow', {
                     {
                         iconCls: 'home',
                         tooltip: 'Home Directory',
-                        handler: function () {
-                            Ext.Ajax.request({
-                                url: me.url + "/home",
-                                success: function (res) {
-                                    var result = Ext.JSON.decode(res.responseText);
-                                    var home = result.data;
-                                    me.down("treepanel").selectPath("/Root/" + home.replace(/:/g, ":\\"), 'text');
-                                }
-                            });
-                        }
+                        handler: Ext.Function.bind(me.selectHomeDirectory, me)
                     },
                     {
                         iconCls: 'location',
                         tooltip: 'Current Directory',
-                        handler: function () {
-                           me.selectCurrentLocation();
-                        }
+                        handler: Ext.Function.bind(me.selectCurrentLocation, me)
                     },
                     '-',
                     {
@@ -551,77 +548,26 @@ Ext.define('Commons.window.BrowserWindow', {
                         tooltip: 'New Folder ...',
                         disabled: true,
                         action: 'add',
-                        handler: function () {
-                            var tree = me.down("treepanel");
-                            var node = tree.getSelectionModel().getLastSelected();
-                            Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
-                                if (v == "ok") {
-                                    Ext.Ajax.request({
-                                        url: me.url + "/create",
-                                        params: {
-                                            id: node.raw.id + "/" + name,
-                                            text: name
-                                        },
-                                        success: function (response) {
-                                            var result = Ext.JSON.decode(response.responseText);
-                                            if (result.success) {
-                                                node.appendChild({id: node.raw.id + "/" + name, text: name, loaded: true});
-                                                tree.selectPath(node.lastChild.getPath('text'), 'text');
-                                            } else {
-                                                Ext.CommonsMsg.error('Error', result.message);
-                                            }
-                                            node.expand();
-                                        }
-                                    });
-                                }
-                            }, this);
-                        }
+                        handler: Ext.Function.bind(me.createDirectory, me)
                     },
                     {
                         iconCls: 'delete',
-                        tooltip: 'Delete Folder',
+                        tooltip: 'Delete',
                         disabled: true,
                         action: 'delete',
-                        handler: function () {
-                            var tree = me.down("treepanel");
-                            var node = tree.getSelectionModel().getLastSelected();
-                            var parentNode = node.parentNode;
-                            var confirm = Ext.String.format("Are you sure you want to delete the folder {0} ?", node.raw.id);
-                            Ext.Msg.confirm("Confirm", confirm, function (v) {
-                                if (v === "yes") {
-                                    Ext.Ajax.request({
-                                        url: me.url + "/delete",
-                                        params: {
-                                            id: node.raw.id,
-                                            text: node.raw.text
-                                        },
-                                        success: function (response) {
-                                            var result = Ext.JSON.decode(response.responseText);
-                                            if (result.success) {
-                                                node.remove();
-                                                tree.selectPath(parentNode.getPath('text'), 'text');
-                                            } else {
-                                                Ext.CommonsMsg.error('Error', result.message);
-                                            }
-                                        }
-                                    });
-                                }
-                            }, this);
-                        }
+                        handler: Ext.Function.bind(me.deleteDirectory, me)
                     },
                     '-',
                     {
                         iconCls: 'refresh',
                         tooltip: 'Refresh',
-                        handler: function () {
-                            var node = me.down("treepanel").getSelectionModel().getLastSelected();
-                            store.load({node: node});
-                        }
+                        handler: Ext.Function.bind(me.refreshNode, me)
                     }
                 ],
                 listeners: {
-                    itemdblclick: function (tree, records) {
-
+                    itemcontextmenu: function (tree, node, item, index, e) {
+                        e.stopEvent();
+                        menu.showAt(e.getXY());
                     },
                     selectionchange: function ( tree, records ){
                         var addBtn = me.down("button[action=add]"),
@@ -635,7 +581,7 @@ Ext.define('Commons.window.BrowserWindow', {
                         }
                     },
                     viewready: function () {
-                        me.selectCurrentLocation();
+                        me.selectCurrentLocation(me);
                     }
                 }
 
@@ -645,6 +591,92 @@ Ext.define('Commons.window.BrowserWindow', {
         me.addEvents('afterSave');
 
         this.callParent(arguments);
+    },
+
+    selectHomeDirectory: function () {
+        var me = this;
+        Ext.Ajax.request({
+            url: me.url + "/home",
+            success: function (res) {
+                var result = Ext.JSON.decode(res.responseText);
+                var home = result.data;
+                me.down("treepanel").selectPath("/Root/" + home.replace(/:/g, ":\\"), 'text');
+            }
+        });
+    },
+
+    selectCurrentLocation: function(){
+        var me = this;
+        Ext.Ajax.request({
+            url: me.url + "/current",
+            success: function (res) {
+                var result = Ext.JSON.decode(res.responseText);
+                var current = result.data;
+                me.down("treepanel").selectPath("/Root/" + current.replace(/:/g, ":\\"), 'text');
+            }
+        });
+    },
+
+    createDirectory: function () {
+        var  me = this;
+        var tree = me.down("treepanel");
+        var node = tree.getSelectionModel().getLastSelected();
+        Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
+            if (v == "ok") {
+                Ext.Ajax.request({
+                    url: me.url + "/create",
+                    params: {
+                        id: node.raw.id + "/" + name,
+                        text: name
+                    },
+                    success: function (response) {
+                        var result = Ext.JSON.decode(response.responseText);
+                        if (result.success) {
+                            node.appendChild({id: node.raw.id + "/" + name, text: name, loaded: true});
+                            tree.selectPath(node.lastChild.getPath('text'), 'text');
+                        } else {
+                            Ext.CommonsMsg.error('Error', result.message);
+                        }
+                        node.expand();
+                    }
+                });
+            }
+        }, this);
+    },
+
+    deleteDirectory: function () {
+        var  me = this;
+        var tree = me.down("treepanel");
+        var node = tree.getSelectionModel().getLastSelected();
+        var parentNode = node.parentNode;
+        var confirm = Ext.String.format("Are you sure you want to delete the folder {0} ?", node.raw.id);
+        Ext.Msg.confirm("Confirm", confirm, function (v) {
+            if (v === "yes") {
+                Ext.Ajax.request({
+                    url: me.url + "/delete",
+                    params: {
+                        id: node.raw.id,
+                        text: node.raw.text
+                    },
+                    success: function (response) {
+                        var result = Ext.JSON.decode(response.responseText);
+                        if (result.success) {
+                            node.remove();
+                            tree.selectPath(parentNode.getPath('text'), 'text');
+                        } else {
+                            Ext.CommonsMsg.error('Error', result.message);
+                        }
+                    }
+                });
+            }
+        }, this);
+    },
+
+    refreshNode: function () {
+        var  me = this;
+        var tree = me.down("treepanel");
+        var node = tree.getSelectionModel().getLastSelected();
+        tree.getStore().load({node: node});
     },
 
     saveHandler: function () {
@@ -660,18 +692,52 @@ Ext.define('Commons.window.BrowserWindow', {
             me.fireEvent('afterSave', browserfield);
         }
         me.close();
-    },
+    }
 
-    selectCurrentLocation: function(){
+});
+
+Ext.define('Commons.window.BrowserWindow.Menu', {
+    extend: 'Ext.menu.Menu',
+    alias: 'widget.browserwindowmenu',
+    width: 200,
+
+    initComponent: function () {
         var me = this;
-        Ext.Ajax.request({
-            url: me.url + "/current",
-            success: function (res) {
-                var result = Ext.JSON.decode(res.responseText);
-                var current = result.data;
-                me.down("treepanel").selectPath("/Root/" + current.replace(/:/g, ":\\"), 'text');
+        this.items = [
+            {
+                action: 'home',
+                text: 'Home Directory',
+                iconCls: 'home',
+                handler: me.selectHomeDirectory
+            },
+            {
+                action: 'location',
+                text: 'Current Directory',
+                iconCls: 'location',
+                handler: me.selectCurrentLocation
+            },
+            '-',
+            {
+                action: 'create',
+                text: 'New Folder ...',
+                iconCls: 'add',
+                handler: me.createDirectory
+            },
+            {
+                action: 'delete',
+                text: 'Delete',
+                iconCls: 'delete',
+                handler: me.deleteDirectory
+            },
+            '-',
+            {
+                action: 'refresh',
+                text: 'Refresh',
+                iconCls: 'refresh',
+                handler: me.refreshNode
             }
-        });
+        ];
+        this.callParent(arguments);
     }
 });
 
