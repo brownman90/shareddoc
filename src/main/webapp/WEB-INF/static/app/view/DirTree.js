@@ -20,5 +20,11 @@ Ext.define('Share.view.DirTree', {
     ],
     viewConfig: {
         loadMask: true
+    },
+
+    listeners: {
+        viewready: function (tree) {
+            tree.selectPath(tree.getRootNode().getPath());
+        }
     }
 });

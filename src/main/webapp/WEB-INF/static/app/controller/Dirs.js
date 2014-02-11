@@ -26,7 +26,7 @@ Ext.define('Share.controller.Dirs', {
                 itemcontextmenu: this.nodeContext
             },
             'dirtree tool[action=refresh]': {
-                click: this.refreshTree
+                click: this.refreshNode
             },
             'dirmenu menuitem[action=refresh]': {
                 click: this.refreshNode
@@ -54,10 +54,6 @@ Ext.define('Share.controller.Dirs', {
         docStore.load();
 
 
-    },
-
-    refreshTree: function () {
-        this.getDirsStore().reload();
     },
 
     nodeContext: function (tree, node, item, index, e) {
