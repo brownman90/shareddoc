@@ -10,6 +10,10 @@
     background-image: url(../images/delete.png) !important;
 }
 
+.remove {
+    background-image: url(../images/remove.png) !important;
+}
+
 .edit {
     background-image: url(../images/edit.png) !important;
 }
@@ -68,4 +72,8 @@
 
 .location {
     background-image: url(../images/location.png) !important;
+}
+
+.newfolder {
+    background-image: url(../images/newfolder.png) !important;
 }

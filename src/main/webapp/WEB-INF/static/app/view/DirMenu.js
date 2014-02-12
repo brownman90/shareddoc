@@ -13,11 +13,13 @@ Ext.define('Share.view.DirMenu', {
             '-',
             {
                 action: 'create',
-                text: 'New Folder ...'
+                text: 'New Folder ...',
+                iconCls: 'newfolder'
             },
             {
                 action: 'delete',
-                text: 'Delete'
+                text: 'Delete',
+                iconCls: 'remove'
             }
         ];
         this.callParent(arguments);

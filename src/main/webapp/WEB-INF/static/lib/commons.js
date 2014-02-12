@@ -544,14 +544,14 @@ Ext.define('Commons.window.BrowserWindow', {
                     },
                     '-',
                     {
-                        iconCls: 'add',
+                        iconCls: 'newfolder',
                         tooltip: 'New Folder ...',
                         disabled: true,
                         action: 'add',
                         handler: Ext.Function.bind(me.createDirectory, me)
                     },
                     {
-                        iconCls: 'delete',
+                        iconCls: 'remove',
                         tooltip: 'Delete',
                         disabled: true,
                         action: 'delete',
@@ -720,13 +720,13 @@ Ext.define('Commons.window.BrowserWindow.Menu', {
             {
                 action: 'create',
                 text: 'New Folder ...',
-                iconCls: 'add',
+                iconCls: 'newfolder',
                 handler: me.createDirectory
             },
             {
                 action: 'delete',
                 text: 'Delete',
-                iconCls: 'delete',
+                iconCls: 'remove',
                 handler: me.deleteDirectory
             },
             '-',
