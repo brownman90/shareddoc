@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @Controller
@@ -51,20 +50,10 @@ public class DocController {
 
     @RequestMapping("/download")
     public String download(HttpServletResponse response, SDPDoc sdpDoc, ModelMap model)
-    throws Exception {
+            throws Exception {
         SDPDoc file = docService.findById(sdpDoc);
-        if (file == null) {
-            model.put("status", false);
-            model.put("message", "\"该文件不存在，可能已被删除。\"");
-            return "share/files";
-        }
         try {
             docService.download(file, response);
-        } catch (FileNotFoundException e) {
-            model.put("status", false);
-            model.put("message", "\"该文件不存在，可能已被删除。\"");
-            // docService.delete(sdpDoc);
-            return "share/files";
         } catch (IOException e) {
             e.printStackTrace();
         }

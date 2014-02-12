@@ -54,7 +54,7 @@ public class DocServiceImpl implements DocService {
     public void upload(SDPDoc sdpDoc) throws FileExistsException, FileUploadBase.FileSizeLimitExceededException {
         MultipartFile uploadedFile = sdpDoc.getFile();
         String fileName = uploadedFile.getOriginalFilename();
-        File savedFile = new File(rootAbsolutePath + sdpDoc.getPath() + fileName);
+        File savedFile = new File(rootAbsolutePath + sdpDoc.getPath() + "/" + fileName);
         if (savedFile.exists()) {
             throw new FileExistsException(fileName + " exists in " + rootAbsolutePath + sdpDoc.getPath() + " .");
         }
@@ -98,7 +98,7 @@ public class DocServiceImpl implements DocService {
      */
     public void download(SDPDoc sdpDoc, HttpServletResponse response)//TODO
     throws IOException {
-        File srcFile = new File(rootAbsolutePath + sdpDoc.getPath() + sdpDoc.getFullName());
+        File srcFile = new File(rootAbsolutePath + sdpDoc.getPath() + "/" + sdpDoc.getFullName());
         InputStream inputStream = new FileInputStream(srcFile);
         OutputStream os = response.getOutputStream();
         response.setCharacterEncoding("utf-8");
