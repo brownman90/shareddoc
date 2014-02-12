@@ -635,7 +635,7 @@ Ext.define('Commons.window.BrowserWindow', {
                             node.appendChild({id: node.raw.id + "/" + name, text: name, loaded: true});
                             tree.selectPath(node.lastChild.getPath('text'), 'text');
                         } else {
-                            Ext.CommonsMsg.error('Error', result.message);
+                            Ext.CommonsMsg.error('Error', result.message, Ext.Function.bind(me.createDirectory, me));
                         }
                         node.expand();
                     }

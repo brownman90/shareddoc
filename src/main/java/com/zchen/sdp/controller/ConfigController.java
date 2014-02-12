@@ -1,7 +1,6 @@
 package com.zchen.sdp.controller;
 
 import com.zchen.extjsassistance.base.model.AjaxResult;
-import com.zchen.extjsassistance.fs.ExtjsDirectoryAssistant;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
 import com.zchen.sdp.service.ConfigService;
@@ -12,8 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.*;
 
 /**
  * @author Zhouce Chen
@@ -83,12 +81,16 @@ public class ConfigController {
     @RequestMapping("/fs/create")
     public
     @ResponseBody
-    AjaxResult createDirectory(String id) {
+    AjaxResult createDirectory(DirectoryNode node) {
         try {
-            ExtjsDirectoryAssistant.createDirectory(id);
+            Path directory = Paths.get(node.getId());
+            Files.createDirectory(directory);
         }  catch (FileAlreadyExistsException e) {
             return AjaxResult.get().failure()
-                    .setMessage("Create directory failed. Directory " + id + " has exists.");
+                    .setMessage("Create folder failed. Folder '" + node.getId() + "' has exists.");
+        } catch (InvalidPathException e) {
+            return AjaxResult.get().failure()
+                    .setMessage("Create folder failed. Invalid folder name '" + node.getText() + "'.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,12 +100,12 @@ public class ConfigController {
     @RequestMapping("/fs/delete")
     public
     @ResponseBody
-    AjaxResult deleteDirectory(String id) {
+    AjaxResult deleteDirectory(DirectoryNode node) {
         try {
-            configService.deleteDirectory(id);
+            configService.deleteDirectory(node.getId());
         } catch (DirectoryNotEmptyException e) {
             return AjaxResult.get().failure()
-                    .setMessage("Delete directory failed. Directory " + id + " is not empty.");
+                    .setMessage("Delete folder failed. Folder '" + node.getId() + "' is not empty.");
         } catch (IOException e) {
             e.printStackTrace();
         }

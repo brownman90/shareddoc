@@ -60,7 +60,7 @@ Ext.define('Share.controller.Dirs', {
         e.stopEvent();
         Share.TreeMenu.showAt(e.getXY());
         var deleteBtn = Share.TreeMenu.down('menuitem[action=delete]');
-        if(node.isRoot()){
+        if (node.isRoot()) {
             deleteBtn.disable();
         } else {
             deleteBtn.enable();
@@ -75,6 +75,7 @@ Ext.define('Share.controller.Dirs', {
     },
 
     createDir: function () {
+        var me = this;
         var tree = this.getDirTree();
         var node = tree.getSelectionModel().getLastSelected();
         Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
@@ -82,17 +83,17 @@ Ext.define('Share.controller.Dirs', {
                 Ext.Ajax.request({
                     url: '/dir/create',
                     params: {
-                        id: node.raw.id +"/"+ name,
+                        id: node.raw.id + "/" + name,
                         text: name
                     },
                     success: function (response) {
                         var result = Ext.JSON.decode(response.responseText);
                         if (result.success) {
-                            node.appendChild({id: node.raw.id +"/"+ name, text: name, loaded: true});
+                            node.appendChild({id: node.raw.id + "/" + name, text: name, loaded: true});
                             tree.selectPath(node.lastChild.getPath('text'), 'text');
                             tree.fireEvent('itemclick', this, tree.getSelectionModel().getLastSelected());
                         } else {
-                            Ext.CommonsMsg.error('Error', result.message);
+                            Ext.CommonsMsg.error('Error', result.message, Ext.Function.bind(me.createDir, me));
                         }
                         node.expand();
                     }

@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.*;
 
 /**
  * @author Zhouce Chen
@@ -56,7 +55,7 @@ public class DirController {
             ExtjsDirectoryAssistant.deleteDirectory(path);
         } catch (DirectoryNotEmptyException e) {
             return AjaxResult.get().failure()
-                    .setMessage("Delete directory failed. Directory " + directoryNode.getId() + " is not empty.");
+                    .setMessage("Delete folder failed. Folder '" + directoryNode.getId() + "' is not empty.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,10 +68,14 @@ public class DirController {
     AjaxResult create(DirectoryNode directoryNode) {
         try {
             String path = rootAbsolutePath + directoryNode.getId();
-            ExtjsDirectoryAssistant.createDirectory(path);
+            Path directory = Paths.get(path);
+            Files.createDirectory(directory);
         } catch (FileAlreadyExistsException e) {
             return AjaxResult.get().failure()
-                    .setMessage("Create directory failed. Directory " + directoryNode.getId() + " has exists.");
+                    .setMessage("Create folder failed. Folder '" + directoryNode.getId() + "' has exists.");
+        } catch (InvalidPathException e) {
+            return AjaxResult.get().failure()
+                    .setMessage("Create folder failed. Invalid folder name '" + directoryNode.getText() + "'.");
         } catch (IOException e) {
             e.printStackTrace();
         }
