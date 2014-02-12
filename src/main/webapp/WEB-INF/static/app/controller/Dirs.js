@@ -80,6 +80,11 @@ Ext.define('Share.controller.Dirs', {
         var node = tree.getSelectionModel().getLastSelected();
         Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
             if (v == "ok") {
+                name = Ext.String.trim(name);
+                if (name === '') {
+                    Ext.CommonsMsg.error('Error', 'Folder name can not be empty.', Ext.Function.bind(me.createDir, me));
+                    return;
+                }
                 Ext.Ajax.request({
                     url: '/dir/create',
                     params: {
@@ -119,7 +124,6 @@ Ext.define('Share.controller.Dirs', {
                         var result = Ext.JSON.decode(response.responseText);
                         if (result.success) {
                             node.remove();
-                            console.log(parentNode.getPath('text'));
                             tree.selectPath(parentNode.getPath('text'), 'text');
                             tree.fireEvent('itemclick', this, parentNode);
                         } else {

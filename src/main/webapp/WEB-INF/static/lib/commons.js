@@ -623,6 +623,11 @@ Ext.define('Commons.window.BrowserWindow', {
         var node = tree.getSelectionModel().getLastSelected();
         Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
             if (v == "ok") {
+                name = Ext.String.trim(name);
+                if (name === '') {
+                    Ext.CommonsMsg.error('Error', 'Folder name can not be empty.', Ext.Function.bind(me.createDirectory, me));
+                    return;
+                }
                 Ext.Ajax.request({
                     url: me.url + "/create",
                     params: {
