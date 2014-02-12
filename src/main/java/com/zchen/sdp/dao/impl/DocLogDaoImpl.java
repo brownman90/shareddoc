@@ -65,7 +65,7 @@ public class DocLogDaoImpl implements DocLogDao {
             log.setName(rs.getString("name"));
             log.setPath(rs.getString("path"));
             log.setOperator(rs.getString("operator"));
-            log.setTime(rs.getString("time"));
+            log.setTime(rs.getTimestamp("time"));
             return log;
         }
     }

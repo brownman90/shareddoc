@@ -1,5 +1,7 @@
 package com.zchen.sdp.bean;
 
+import java.util.Date;
+
 /**
  * @author Zhouce Chen
  * @version Feb 12, 2014
@@ -13,7 +15,7 @@ public class SDPDocLog {
 
     private String operator;
 
-    private String time;
+    private Date time;
 
     private String action;
 
@@ -49,11 +51,11 @@ public class SDPDocLog {
         this.operator = operator;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

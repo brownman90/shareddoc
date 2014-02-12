@@ -86,7 +86,7 @@ public class DocDaoImpl implements DocDao {
             sdpDoc.setName(rs.getString("name"));
             sdpDoc.setType(rs.getString("type"));
             sdpDoc.setSize(rs.getLong("size"));
-            sdpDoc.setTime(rs.getString("time"));
+            sdpDoc.setTime(rs.getTimestamp("time"));
             sdpDoc.setCommitter(rs.getString("committer"));
             sdpDoc.setPath(rs.getString("path"));
             if (sdpDoc.getType().equals("")) {

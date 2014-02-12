@@ -7,7 +7,7 @@ Ext.define('Share.model.Doc', {
         {name: 'type', type: 'string'},
         {name: 'size', type: 'string'},
         {name: 'path', type: 'string'},
-        {name: 'time', type: 'string'},
+        {name: 'time', type: 'date', dateFormat: 'time'},
         {name: 'committer', type: 'string'}
 
 

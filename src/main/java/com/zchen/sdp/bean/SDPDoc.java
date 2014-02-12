@@ -2,6 +2,8 @@ package com.zchen.sdp.bean;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
+
 /**
  * The SDP document class
  * @author Zhouce Chen
@@ -37,7 +39,7 @@ public class SDPDoc {
     /**
      * Uploading document time
      */
-    private String time;
+    private Date time;
 
     /**
      * Document committer
@@ -101,11 +103,11 @@ public class SDPDoc {
         this.size = size;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

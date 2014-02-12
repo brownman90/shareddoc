@@ -18,7 +18,7 @@ Ext.define('Share.view.DocLogGrid', {
         }},
         {header: 'Upload Path', dataIndex: 'path', flex: 2},
         {header: 'Operator', dataIndex: 'operator', flex: 1, align: 'center'},
-        {header: 'Action Time', dataIndex: 'time', flex: 1, align: 'center'}
+        {header: 'Action Time', dataIndex: 'time', xtype: 'datecolumn', format: 'Y-m-d H:s:i', flex: 1, align: 'center'}
     ],
     bbar: {
         xtype: 'pagingtoolbar',

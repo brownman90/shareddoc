@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -78,15 +77,15 @@ public class DocServiceImpl implements DocService {
         }
         sdpDoc.setSize(uploadedFile.getSize());
         sdpDoc.setCommitter("czc");
-        String currentTime = DateFormat.getDateInstance().format(new Date());
-        sdpDoc.setTime(currentTime);
+        Date current = new Date();
+        sdpDoc.setTime(current);
         docDao.insert(sdpDoc);
 
         SDPDocLog log = new SDPDocLog();
         log.setName(sdpDoc.getFullName());
         log.setPath(sdpDoc.getPath());
         log.setOperator("czc");
-        log.setTime(currentTime);
+        log.setTime(current);
         log.setAction("upload");
         docLogDao.insert(log);
     }
@@ -140,7 +139,7 @@ public class DocServiceImpl implements DocService {
             log.setAction("trash");
             log.setOperator("czc");
             log.setPath(sdpDoc.getPath());
-            log.setTime(DateFormat.getDateInstance().format(new Date()));
+            log.setTime(new Date());
             docLogDao.insert(log);
         }
     }

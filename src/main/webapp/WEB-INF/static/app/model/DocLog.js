@@ -6,7 +6,7 @@ Ext.define('Share.model.DocLog', {
         {name: 'action', type: 'string'},
         {name: 'name', type: 'string'},
         {name: 'path', type: 'string'},
-        {name: 'time', type: 'string'},
+        {name: 'time', type: 'date', dateFormat: 'time'},
         {name: 'operator', type: 'string'}
 
 
