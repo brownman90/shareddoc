@@ -2,7 +2,9 @@ package com.zchen.sdp.service.impl;
 
 import com.zchen.extjsassistance.base.model.GridLoad;
 import com.zchen.sdp.bean.SDPDoc;
+import com.zchen.sdp.bean.SDPDocLog;
 import com.zchen.sdp.dao.DocDao;
+import com.zchen.sdp.dao.DocLogDao;
 import com.zchen.sdp.service.DocService;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FileExistsException;
@@ -26,6 +28,9 @@ public class DocServiceImpl implements DocService {
     String rootAbsolutePath = "D:/shared_doc";
     @Resource
     private DocDao docDao;
+
+    @Resource
+    private DocLogDao docLogDao;
 
 
     /**
@@ -73,9 +78,17 @@ public class DocServiceImpl implements DocService {
         }
         sdpDoc.setSize(uploadedFile.getSize());
         sdpDoc.setCommitter("czc");
-        sdpDoc.setTime(DateFormat.getDateInstance().format(new Date()));
+        String currentTime = DateFormat.getDateInstance().format(new Date());
+        sdpDoc.setTime(currentTime);
         docDao.insert(sdpDoc);
 
+        SDPDocLog log = new SDPDocLog();
+        log.setName(sdpDoc.getFullName());
+        log.setPath(sdpDoc.getPath());
+        log.setOperator("czc");
+        log.setTime(currentTime);
+        log.setAction("upload");
+        docLogDao.insert(log);
     }
 
     /**
@@ -121,6 +134,14 @@ public class DocServiceImpl implements DocService {
             file.delete();
 
             docDao.delete(sdpDoc);
+
+            SDPDocLog log = new SDPDocLog();
+            log.setName(sdpDoc.getFullName());
+            log.setAction("trash");
+            log.setOperator("czc");
+            log.setPath(sdpDoc.getPath());
+            log.setTime(DateFormat.getDateInstance().format(new Date()));
+            docLogDao.insert(log);
         }
     }
 

@@ -6,6 +6,6 @@ Ext.application({
     autoCreateViewport: true,
 
     controllers: [
-        'Docs', 'Dirs'
+        'Docs', 'Dirs', 'DocLogs'
     ]
 });

@@ -86,7 +86,7 @@ public class SDPDoc {
     }
 
     public String getFullName() {
-        return fullName;
+        return name + "." + type;
     }
 
     public void setFullName(String fullName) {
