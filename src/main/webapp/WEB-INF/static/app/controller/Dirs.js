@@ -75,7 +75,8 @@ Ext.define('Share.controller.Dirs', {
     },
 
     createDir: function () {
-        var node = this.getDirTree().getSelectionModel().getLastSelected();
+        var tree = this.getDirTree();
+        var node = tree.getSelectionModel().getLastSelected();
         Ext.Msg.prompt("New Folder", "Enter a new folder name :", function (v, name) {
             if (v == "ok") {
                 Ext.Ajax.request({
@@ -88,6 +89,8 @@ Ext.define('Share.controller.Dirs', {
                         var result = Ext.JSON.decode(response.responseText);
                         if (result.success) {
                             node.appendChild({id: node.raw.id +"/"+ name, text: name, loaded: true});
+                            tree.selectPath(node.lastChild.getPath('text'), 'text');
+                            tree.fireEvent('itemclick', this, tree.getSelectionModel().getLastSelected());
                         } else {
                             Ext.CommonsMsg.error('Error', result.message);
                         }
@@ -99,7 +102,9 @@ Ext.define('Share.controller.Dirs', {
     },
 
     deleteDir: function () {
-        var node = this.getDirTree().getSelectionModel().getLastSelected();
+        var tree = this.getDirTree();
+        var node = tree.getSelectionModel().getLastSelected();
+        var parentNode = node.parentNode;
         var confirm = Ext.String.format("Are you sure you want to delete the directory {0} ?", node.raw.id);
         Ext.Msg.confirm("Confirm", confirm, function (v) {
             if (v === "yes") {
@@ -113,6 +118,9 @@ Ext.define('Share.controller.Dirs', {
                         var result = Ext.JSON.decode(response.responseText);
                         if (result.success) {
                             node.remove();
+                            console.log(parentNode.getPath('text'));
+                            tree.selectPath(parentNode.getPath('text'), 'text');
+                            tree.fireEvent('itemclick', this, parentNode);
                         } else {
                             Ext.CommonsMsg.error('Error', result.message);
                         }
