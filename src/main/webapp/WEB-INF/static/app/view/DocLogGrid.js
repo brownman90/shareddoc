@@ -23,7 +23,7 @@ Ext.define('Share.view.DocLogGrid', {
     bbar: {
         xtype: 'pagingtoolbar',
         store: 'DocLogs',
-        pageSize: 5,
+        pageSize: 4,
         displayInfo: true
     }
 

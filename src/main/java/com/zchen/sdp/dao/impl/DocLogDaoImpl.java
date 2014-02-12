@@ -50,6 +50,7 @@ public class DocLogDaoImpl implements DocLogDao {
             where.append(" and  path like :path ");
         }
         sb.append(where);
+        sb.append(" order by time desc ");
         sb.append(String.format(" limit %d,%d ", params.getStart(), params.getLimit()));
         List<SDPDocLog> list = jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(log), new DocLogMapper());
         int total = count(where, log);
