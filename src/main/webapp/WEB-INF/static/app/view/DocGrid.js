@@ -71,6 +71,7 @@ Ext.define('Share.view.DocGrid', {
                                     var result = Ext.JSON.decode(data.response.responseText);
                                     if (result.success) {
                                         store.remove(record);
+                                        Ext.data.StoreManager.get('DocLogs').reload();
                                     } else {
                                         Ext.CommonsMsg.error('Error', result.message);
                                     }
