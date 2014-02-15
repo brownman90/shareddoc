@@ -5,7 +5,7 @@ Ext.define('Share.controller.DocLogs', {
 
     models: [  'DocLog' ],
 
-    views: ['DocLogGrid'],
+    views: ['LogWin','DocLogGrid'],
 
     init: function () {
         this.control({

@@ -39,7 +39,7 @@ Ext.define('Share.view.DocGrid', {
         }},
         {header: 'Path', dataIndex: 'path', flex: 2},
         {header: 'Committer', dataIndex: 'committer', flex: 1, align: 'center'},
-        {header: 'Post Time', dataIndex: 'time', xtype: 'datecolumn', format: 'Y-m-d H:s:i', flex: 1, align: 'center'},
+        {header: 'Post Time', dataIndex: 'time', xtype: 'datecolumn', format: 'Y-m-d H:s:i', flex: 2, align: 'center'},
         {xtype: 'actioncolumn', menuDisabled: true, align: 'center', text: 'Actions',
             width: 80,
             items: [
@@ -94,7 +94,17 @@ Ext.define('Share.view.DocGrid', {
         store: 'Docs',
         pageSize: 15,
         displayInfo: true,
-        plugins: Ext.create('Ext.ux.ProgressBarPager')
+        plugins: Ext.create('Ext.ux.ProgressBarPager'),
+        items : [
+            ' ','-',{
+                text : 'Logs',
+                iconCls: 'log',
+                tooltip: 'Document Logs and System Logs',
+                handler : function(){
+                    Ext.widget("logwin").show();
+                }
+            }
+        ]
     },
 
     listeners: {
