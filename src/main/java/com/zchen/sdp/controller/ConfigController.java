@@ -1,6 +1,6 @@
 package com.zchen.sdp.controller;
 
-import com.zchen.extjsassistance.base.model.AjaxResult;
+import com.zchen.extjsassistance.model.AjaxResult;
 import com.zchen.extjsassistance.fs.model.DirectoryNode;
 import com.zchen.sdp.bean.SDPConfig;
 import com.zchen.sdp.service.ConfigService;

@@ -1,8 +1,7 @@
 package com.zchen.sdp.controller;
 
-import com.zchen.extjsassistance.base.model.GridLoad;
-import com.zchen.extjsassistance.base.model.GridPage;
-import com.zchen.extjsassistance.base.model.GridParams;
+
+import com.zchen.extjsassistance.model.grid.*;
 import com.zchen.sdp.bean.SDPDocLog;
 import com.zchen.sdp.service.DocLogService;
 import org.springframework.stereotype.Controller;
