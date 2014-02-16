@@ -3,7 +3,7 @@ Ext.define('Share.store.Docs', {
     model: 'Share.model.Doc',
     autoLoad: true,
     pageSize: 15,
-
+    remoteSort: true,
     proxy: {
         type: 'ajax',
         api: {

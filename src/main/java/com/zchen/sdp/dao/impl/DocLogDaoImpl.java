@@ -1,6 +1,7 @@
 package com.zchen.sdp.dao.impl;
 
 import com.zchen.extjsassistance.base.model.GridLoad;
+import com.zchen.extjsassistance.base.model.GridPage;
 import com.zchen.extjsassistance.base.model.GridParams;
 import com.zchen.sdp.bean.SDPDocLog;
 import com.zchen.sdp.dao.DocLogDao;
@@ -38,7 +39,7 @@ public class DocLogDaoImpl implements DocLogDao {
     }
 
     @Override
-    public GridLoad<SDPDocLog> query(SDPDocLog log, GridParams params) {
+    public GridLoad<SDPDocLog> query(SDPDocLog log, GridPage page) {
         StringBuilder sb = new StringBuilder("select * from doc_log where 1=1");
         StringBuilder where = new StringBuilder();
         if (StringUtils.isNotEmpty(log.getName())) {
@@ -51,7 +52,7 @@ public class DocLogDaoImpl implements DocLogDao {
         }
         sb.append(where);
         sb.append(" order by time desc ");
-        sb.append(String.format(" limit %d,%d ", params.getStart(), params.getLimit()));
+        sb.append(String.format(" limit %d,%d ", page.getStart(), page.getLimit()));
         List<SDPDocLog> list = jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(log), new DocLogMapper());
         int total = count(where, log);
         return new GridLoad<>(list, total);

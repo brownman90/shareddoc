@@ -1,8 +1,7 @@
 package com.zchen.sdp.controller;
 
-import com.zchen.extjsassistance.base.model.AjaxResult;
-import com.zchen.extjsassistance.base.model.GridLoad;
-import com.zchen.extjsassistance.base.model.GridParams;
+import com.zchen.extjsassistance.model.*;
+import com.zchen.extjsassistance.model.grid.*;
 import com.zchen.sdp.bean.SDPDoc;
 import com.zchen.sdp.service.DocService;
 import org.apache.commons.fileupload.FileUploadBase;
@@ -32,8 +31,9 @@ public class DocController {
     @RequestMapping("/list")
     public
     @ResponseBody
-    GridLoad<SDPDoc> list(SDPDoc sdpDoc, GridParams params) {
-        return docService.query(sdpDoc, params.getStart(), params.getLimit());
+    GridLoad<SDPDoc> list(SDPDoc sdpDoc, GridPage page, String sort) {
+
+        return docService.query(sdpDoc, page, GridSort.toGridSortList(sort));
     }
 
     @RequestMapping("/upload")

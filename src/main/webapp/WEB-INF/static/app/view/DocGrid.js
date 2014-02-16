@@ -6,7 +6,6 @@ Ext.define('Share.view.DocGrid', {
     title: 'Document List',
     titleAlign: 'center',
     store: 'Docs',
-
     selType: 'checkboxmodel',
     emptyText: "No document is in this directory. Click 'browser' to select document you want to share, then click 'Upload'.",
     tbar: [
@@ -71,7 +70,6 @@ Ext.define('Share.view.DocGrid', {
                                     var result = Ext.JSON.decode(data.response.responseText);
                                     if (result.success) {
                                         store.remove(record);
-                                        Ext.data.StoreManager.get('DocLogs').reload();
                                     } else {
                                         Ext.CommonsMsg.error('Error', result.message);
                                     }

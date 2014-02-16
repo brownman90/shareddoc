@@ -1,6 +1,9 @@
 package com.zchen.sdp.dao.impl;
 
-import com.zchen.extjsassistance.base.model.GridLoad;
+import com.zchen.extjsassistance.model.grid.GridPage;
+import com.zchen.extjsassistance.model.SQLHelper;
+import com.zchen.extjsassistance.model.grid.GridLoad;
+import com.zchen.extjsassistance.model.grid.GridSort;
 import com.zchen.sdp.bean.SDPDoc;
 import com.zchen.sdp.dao.DocDao;
 import org.apache.commons.lang.StringUtils;
@@ -50,7 +53,7 @@ public class DocDaoImpl implements DocDao {
     }
 
     @Override
-    public GridLoad<SDPDoc> query(SDPDoc sdpDoc, int start, int limit) {
+    public GridLoad<SDPDoc> query(SDPDoc sdpDoc, GridPage page, List<GridSort> sorts) {
         StringBuilder sb = new StringBuilder("select * from doc  where 1=1 ");
         StringBuilder where = new StringBuilder();
         if (StringUtils.isNotEmpty(sdpDoc.getName())) {
@@ -62,7 +65,8 @@ public class DocDaoImpl implements DocDao {
             where.append(" and  path like :path ");
         }
         sb.append(where);
-        sb.append(String.format(" limit %d,%d ", start, limit));
+        sb.append(SQLHelper.sortsToSQL(sorts));
+        sb.append(SQLHelper.pageToSQL(page));
         List<SDPDoc> list = jdbcTemplate.query(sb.toString(), new BeanPropertySqlParameterSource(sdpDoc), new DocMapper());
         int total = count(where, sdpDoc);
         return new GridLoad<>(list, total);

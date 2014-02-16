@@ -1,6 +1,6 @@
 package com.zchen.sdp.service.impl;
 
-import com.zchen.extjsassistance.base.model.GridLoad;
+import com.zchen.extjsassistance.model.grid.*;
 import com.zchen.sdp.bean.SDPDoc;
 import com.zchen.sdp.bean.SDPDocLog;
 import com.zchen.sdp.dao.DocDao;
@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Implementation of SDP document operation
@@ -35,13 +36,13 @@ public class DocServiceImpl implements DocService {
     /**
      * Query document list
      * @param sdpDoc   Query condition
-     * @param start  Start row of pager
-     * @param limit  Limit rows of pager
+     * @param page  Page parameters for query docs
+     * @param sort  Sort parameters for query docs
      * @return  ResponseGrid    Document list with pager
      */
     @Override
-    public GridLoad<SDPDoc> query(SDPDoc sdpDoc, int start, int limit) {
-        return docDao.query(sdpDoc, start, limit);
+    public GridLoad<SDPDoc> query(SDPDoc sdpDoc, GridPage page, List<GridSort> sorts) {
+        return docDao.query(sdpDoc, page, sorts);
     }
 
     /**

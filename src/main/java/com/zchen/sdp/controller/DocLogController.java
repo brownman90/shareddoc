@@ -1,6 +1,7 @@
 package com.zchen.sdp.controller;
 
 import com.zchen.extjsassistance.base.model.GridLoad;
+import com.zchen.extjsassistance.base.model.GridPage;
 import com.zchen.extjsassistance.base.model.GridParams;
 import com.zchen.sdp.bean.SDPDocLog;
 import com.zchen.sdp.service.DocLogService;
@@ -24,8 +25,8 @@ public class DocLogController {
     @RequestMapping("/doc/list")
     public
     @ResponseBody
-    GridLoad<SDPDocLog> list(SDPDocLog log, GridParams params) {
-        return docLogService.query(log, params);
+    GridLoad<SDPDocLog> list(SDPDocLog log, GridPage page) {
+        return docLogService.query(log, page);
     }
 
 }

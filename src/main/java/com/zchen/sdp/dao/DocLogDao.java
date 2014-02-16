@@ -1,7 +1,7 @@
 package com.zchen.sdp.dao;
 
 import com.zchen.extjsassistance.base.model.GridLoad;
-import com.zchen.extjsassistance.base.model.GridParams;
+import com.zchen.extjsassistance.base.model.GridPage;
 import com.zchen.sdp.bean.SDPDocLog;
 
 /**
@@ -12,5 +12,5 @@ public interface DocLogDao {
 
     public void insert(SDPDocLog log);
 
-    public GridLoad<SDPDocLog> query(SDPDocLog log, GridParams params);
+    public GridLoad<SDPDocLog> query(SDPDocLog log, GridPage page);
 }

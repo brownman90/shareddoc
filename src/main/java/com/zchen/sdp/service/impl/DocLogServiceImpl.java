@@ -1,6 +1,7 @@
 package com.zchen.sdp.service.impl;
 
 import com.zchen.extjsassistance.base.model.GridLoad;
+import com.zchen.extjsassistance.base.model.GridPage;
 import com.zchen.extjsassistance.base.model.GridParams;
 import com.zchen.sdp.bean.SDPDocLog;
 import com.zchen.sdp.dao.DocLogDao;
@@ -20,7 +21,7 @@ public class DocLogServiceImpl implements DocLogService {
     private DocLogDao docLogDao;
 
     @Override
-    public GridLoad<SDPDocLog> query(SDPDocLog log, GridParams params) {
-        return docLogDao.query(log, params);
+    public GridLoad<SDPDocLog> query(SDPDocLog log,GridPage page) {
+        return docLogDao.query(log, page);
     }
 }

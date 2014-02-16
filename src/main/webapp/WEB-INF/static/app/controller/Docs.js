@@ -81,7 +81,6 @@ Ext.define('Share.controller.Docs', {
                 waitMsg: 'Uploading your shared document ...',
                 success: function (form, data) {
                     store.reload();
-                    docLogGrid.getStore().reload();
                 },
                 failure: function (form, data) {
                     Ext.CommonsMsg.error("Error", data.result.message);
@@ -122,7 +121,6 @@ Ext.define('Share.controller.Docs', {
                         var result = Ext.JSON.decode(response.responseText);
                         if (result.success) {
                             store.remove(records);
-                            docLogGrid.getStore().reload();
                         }
                         else
                             Ext.CommonsMsg.error('Error', result.message);
